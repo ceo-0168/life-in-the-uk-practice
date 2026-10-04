@@ -4,6 +4,7 @@ import { bank, cards } from '../ctx.js';
 import { startSession } from '../session.js';
 import { h, icon, pct, stackedBar, timeAgo } from '../ui.js';
 import { renderWelcome } from './welcome.js';
+import { supportCard } from './support.js';
 
 export function planFor(state, cs) {
   const goal = state.settings.dailyGoal;
@@ -105,7 +106,7 @@ export function renderHome(root) {
       mocks.length ? h('p', { class: 'muted' }, `Last: ${mocks.at(-1).correct}/${mocks.at(-1).total} ${mocks.at(-1).passed ? '— passed' : '— not yet'}`) : null),
     h('a', { class: 'btn', href: '#/practice' }, 'Take a mock', icon('right', 18)));
 
-  root.replaceChildren(h('div', { class: 'stack-v' }, ...banners, hero, readyCard, quick, mockCard));
+  root.replaceChildren(h('div', { class: 'stack-v' }, ...banners, hero, readyCard, quick, mockCard, supportCard('home')));
   return () => {};
 }
 

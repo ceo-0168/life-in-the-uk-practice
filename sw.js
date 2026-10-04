@@ -4,12 +4,12 @@
 // browser's HTTP cache, and only replaces the old set once every file has arrived (install is all-or-nothing).
 // Files are never refreshed one by one, so the app can never run with a mixture of old and new files.
 // VERSION is stamped from the content of the files by `npm run stamp`; a test fails if it is stale.
-const VERSION = '587fe24ce7cf';
+const VERSION = '4fcc4ec2d551';
 const CACHE = `litukp-${VERSION}`;
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest', 'css/styles.css',
   'js/main.js', 'js/engine.js', 'js/store.js', 'js/ctx.js', 'js/ui.js', 'js/session.js',
-  'js/views/home.js', 'js/views/practice.js', 'js/views/stats.js', 'js/views/browse.js', 'js/views/settings.js', 'js/views/welcome.js',
+  'js/views/home.js', 'js/views/practice.js', 'js/views/stats.js', 'js/views/browse.js', 'js/views/settings.js', 'js/views/welcome.js', 'js/views/support.js',
   'data/questions.json',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png',
 ];

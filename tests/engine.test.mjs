@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import {
   isCorrect, optionOrder, deriveCards, counts, daysToTest, intervalDays, streakDays,
   selectQuestions, mergeStates, validateState, normalizeState, emptyState, readiness, verdict, examBreakdown,
-  todayCount, activityByDay, MOCK, buildMock, dayKey, shouldShowWelcome,
+  todayCount, activityByDay, MOCK, buildMock, dayKey, shouldShowWelcome, canAskForSupport, supportKindForSession, SUPPORT,
 } from '../js/engine.js';
 
 const bank = JSON.parse(readFileSync(new URL('../data/questions.json', import.meta.url)));
@@ -276,4 +276,27 @@ test('the welcome screen is only for brand-new visitors', () => {
   const legacy = normalizeState({ attempts: [{ id: 'a', q: 'x', t: 1, ok: true }], sessions: [], meta: {}, settings: {} }).state;
   assert.equal(shouldShowWelcome(legacy), false);
   assert.equal(normalizeState({ attempts: [], sessions: [], settings: { welcomed: 'yes' } }).state.settings.welcomed, false, 'non-boolean is ignored');
+});
+
+test('support requests: only after enough use, at most weekly, never after a weak result', () => {
+  const base = emptyState();
+  const sessions = (n) => Array.from({ length: n }, (_, i) => ({ id: `s${i}` }));
+  const st = (n, settings = {}) => ({ ...base, sessions: sessions(n), settings: { ...base.settings, ...settings } });
+  assert.equal(canAskForSupport(st(SUPPORT.minSessions - 1), NOW), false, 'too early: earn it first');
+  assert.equal(canAskForSupport(st(SUPPORT.minSessions), NOW), true);
+  assert.equal(canAskForSupport(st(9, { supportShownAt: NOW - 2 * DAY }), NOW), false, 'asked within the week');
+  assert.equal(canAskForSupport(st(9, { supportShownAt: NOW - 8 * DAY }), NOW), true, 'a week has passed');
+  assert.equal(canAskForSupport(st(9, { supportHiddenUntil: NOW + DAY }), NOW), false, 'declined ("not now")');
+  assert.equal(canAskForSupport(st(9, { supportHiddenUntil: NOW - DAY }), NOW), true, 'decline has expired');
+
+  const mock = (passed) => ({ mode: 'mock', passed, total: 24, correct: passed ? 20 : 9 });
+  assert.equal(supportKindForSession(mock(true)), 'pass');
+  assert.equal(supportKindForSession(mock(false)), null, 'never ask someone who just failed');
+  const practice = (correct, total) => ({ mode: 'practice', total, correct });
+  assert.equal(supportKindForSession(practice(9, 10)), 'good');
+  assert.equal(supportKindForSession(practice(8, 10)), 'good', '80% counts');
+  assert.equal(supportKindForSession(practice(7, 10)), null, 'below 80%');
+  assert.equal(supportKindForSession(practice(5, 5)), null, 'too short to mean much');
+  assert.equal(normalizeState({ attempts: [], sessions: [], settings: { supportShownAt: 'x', supportHiddenUntil: 5 } }).state.settings.supportHiddenUntil, 5);
+  assert.equal(normalizeState({ attempts: [], sessions: [], settings: { supportShownAt: 'x' } }).state.settings.supportShownAt, 0);
 });

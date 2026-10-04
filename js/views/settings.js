@@ -1,6 +1,7 @@
 import * as store from '../store.js';
 import { daysToTest, SETTING_CHOICES } from '../engine.js';
 import { h, icon, toast, confirmDialog, timeAgo } from '../ui.js';
+import { coffeeButton } from './support.js';
 
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const isStandalone = window.matchMedia?.('(display-mode: standalone)').matches || navigator.standalone === true;
@@ -167,6 +168,8 @@ export function renderSettings(root, { applyTheme }) {
     h('section', { class: 'card' },
       h('h3', null, 'About'),
       h('p', { class: 'muted' }, 'Questions come from the unofficial public question bank at github.com/DHKLeung/life-in-the-uk-test (18 mock exams). They are not Home Office questions. Answers and explanations have been checked against the Life in the UK handbook (3rd edition, with later updates); where the handbook and current law differ, the handbook answer is marked and a note says what changed. Use "Looks wrong?" to flag any answer you doubt.'),
+      h('p', { class: 'muted' }, 'Free and ad-free, made by one person. If it helped, you can buy me a coffee.'),
+      h('div', { class: 'btn-row' }, coffeeButton()),
       h('button', { class: 'btn btn-danger btn-sm', onClick: reset }, 'Erase all progress'))));
   return () => {};
 }

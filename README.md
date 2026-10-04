@@ -61,7 +61,7 @@ Where the handbook and today's law differ (for example, the Senedd now has 96 me
 
 ## Frequently asked questions
 
-**Does it cost anything?** No.
+**Does it cost anything?** No. It's free and ad-free. If it helped you prepare, you can [buy me a coffee](https://buymeacoffee.com/ryanchan).
 
 **Does it work offline?** Yes, after your first visit.
 

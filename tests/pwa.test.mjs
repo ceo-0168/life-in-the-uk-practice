@@ -92,3 +92,17 @@ test('the answer keys the handbook audit confirmed have not moved', () => {
   assert.deepEqual(key('e06q12'), ['False']);
   assert.deepEqual(key('e09q03'), ['False']);
 });
+
+test('the donation link points to the owner\'s page and opens safely', () => {
+  const src = read('js/views/support.js');
+  assert.match(src, /SUPPORT_URL = 'https:\/\/buymeacoffee\.com\/ryanchan'/);
+  assert.match(src, /rel: 'noopener noreferrer'/);
+  assert.match(src, /target: '_blank'/);
+});
+
+test('support prompts never appear in the question screens or the welcome screen', () => {
+  const session = read('js/session.js');
+  const draw = session.slice(session.indexOf('export function renderSession'), session.indexOf('// ---------- results'));
+  assert.ok(!/supportCard|coffeeButton/.test(draw), 'no donation UI while answering');
+  assert.ok(!/supportCard|coffeeButton/.test(read('js/views/welcome.js')), 'none on the welcome screen');
+});

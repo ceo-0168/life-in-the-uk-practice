@@ -281,7 +281,27 @@ export function defaultSettings() {
     theme: 'auto',
     sessionLength: 20,
     welcomed: false,
+    supportShownAt: 0,
+    supportHiddenUntil: 0,
   };
+}
+
+// ---------- Asking for support (never during practice, never to someone who just did badly) ----------
+export const SUPPORT = { minSessions: 5, everyDays: 7, hideDays: 30, thankedDays: 90, goodScore: 0.8, goodMinAnswers: 10 };
+
+/** Has the person used the app enough, and not been asked or declined recently? */
+export function canAskForSupport(state, now = Date.now()) {
+  const st = state.settings;
+  if (state.sessions.length < SUPPORT.minSessions) return false;
+  if (now < (st.supportHiddenUntil || 0)) return false;
+  if (now - (st.supportShownAt || 0) < SUPPORT.everyDays * DAY) return false;
+  return true;
+}
+
+/** Which message suits this result? null = say nothing (e.g. a failed or weak session). */
+export function supportKindForSession(session) {
+  if (session.mode === 'mock') return session.passed ? 'pass' : null;
+  return session.total >= SUPPORT.goodMinAnswers && session.correct / session.total >= SUPPORT.goodScore ? 'good' : null;
 }
 
 /** The first-visit welcome screen: only for someone with no history who hasn't dismissed it. */
@@ -330,6 +350,8 @@ function normalizeSettings(raw) {
     theme: pick('theme'),
     sessionLength: pick('sessionLength'),
     welcomed: typeof r.welcomed === 'boolean' ? r.welcomed : d.welcomed,
+    supportShownAt: num(r.supportShownAt),
+    supportHiddenUntil: num(r.supportHiddenUntil),
   };
 }
 

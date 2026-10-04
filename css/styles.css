@@ -458,3 +458,16 @@ textarea.input { min-height: 0; resize: vertical; }
 .wnotes p strong { color: var(--text); }
 .wnotes .icon { margin-top: 2px; color: var(--primary); }
 #test-date { max-width: 220px; }
+
+/* ---------- support (donation) ---------- */
+.btn-coffee { background: #ffdd00; color: #1b1f2a; border-color: #e6c700; font-weight: 700; }
+.btn-coffee:hover:not(:disabled) { background: #ffe74d; }
+.support { background: color-mix(in srgb, #ffdd00 14%, var(--surface)); border-color: color-mix(in srgb, #ffdd00 45%, var(--line)); }
+.support h3 { margin: 0 0 6px; }
+.support p { margin: 0 0 12px; color: var(--muted); font-size: .95rem; }
+.support-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.support .linkbtn { color: var(--muted); }
+.card > .muted + .muted, .card > .muted + .btn-row { margin-top: 10px; }
+.mock-promo { flex-wrap: wrap; }
+.mock-promo > div { flex: 1 1 200px; }
+.mock-promo .btn { white-space: nowrap; flex: none; }

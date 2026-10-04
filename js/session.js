@@ -1,7 +1,8 @@
 // Running a session (practice with instant feedback, or a timed mock) and showing results.
-import { MOCK, isCorrect, optionOrder, shuffle, uid } from './engine.js';
+import { MOCK, isCorrect, optionOrder, shuffle, uid, supportKindForSession } from './engine.js';
 import * as store from './store.js';
 import { byId, examLabel } from './ctx.js';
+import { supportCard } from './views/support.js';
 import { h, icon, toast, announce, closeDialogs, openDialog, confirmDialog, fmtDuration, pct } from './ui.js';
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
@@ -462,6 +463,9 @@ export function renderResults(root, id) {
     ? h('button', { class: 'btn btn-primary', onClick: () => startSession({ mode: 'practice', kind: 'retry', label: 'Retry missed', qids: missed }) }, icon('refresh', 18), `Retry ${missed.length} missed`)
     : null;
 
+  const kind = supportKindForSession(s);
+  const support = kind ? supportCard(kind) : null; // null when we shouldn't ask (too soon, declined, weak result)
+
   root.replaceChildren(h('div', { class: 'results' },
     banner,
     h('div', { class: 'result-meta' },
@@ -469,6 +473,7 @@ export function renderResults(root, id) {
       h('span', null, `${ids.filter((q) => s.res[q] === 'r').length} right · ${ids.filter((q) => s.res[q] === 'w').length} wrong${ids.some((q) => s.res[q] === 'u') ? ` · ${ids.filter((q) => s.res[q] === 'u').length} unanswered` : ''}`)),
     removed ? h('p', { class: 'muted' }, `${removed} question${removed === 1 ? '' : 's'} from this session ${removed === 1 ? 'is' : 'are'} no longer in the question bank and can't be shown.`) : null,
     h('div', { class: 'result-actions' }, retry, h('a', { class: 'btn', href: '#/' }, 'Home'), h('a', { class: 'btn', href: '#/practice' }, 'Practise more')),
+    support,
     h('div', { class: 'section-head' }, h('h3', null, 'Review'), filterBtn),
     list));
   drawList();
