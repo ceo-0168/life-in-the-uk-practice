@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Life in the UK Practice</title>
+  <meta name="description" content="Practice for the Life in the UK test. Tracks which questions you have done and which you got right.">
+  <meta name="theme-color" content="#f5f4ef">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="UK Test">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="app"><p class="boot">Loading…</p></div>
+  <noscript>This app needs JavaScript to run.</noscript>
+
+  <!-- Watchdog: if the app has not started after a few seconds (e.g. a broken cached file), offer a rescue.
+       "Reset app files" removes cached app code only. Your progress is stored separately and is not touched. -->
+  <script>
+    (function () {
+      function rescue(why) {
+        if (window.__appReady || document.getElementById('rescue')) return;
+        var app = document.getElementById('app');
+        if (!app) return;
+        var box = document.createElement('div');
+        box.id = 'rescue';
+        box.className = 'card rescue';
+        var h = document.createElement('h3'); h.textContent = 'The app did not start';
+        var p = document.createElement('p'); p.className = 'muted';
+        p.textContent = why + ' Your progress is safe. Resetting the app files re-downloads the app and does not touch your progress.';
+        var b = document.createElement('button'); b.className = 'btn btn-primary'; b.textContent = 'Reset app files and reload';
+        b.onclick = function () {
+          var jobs = [];
+          if (navigator.serviceWorker) jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) { return Promise.all(rs.map(function (r) { return r.unregister(); })); }));
+          if (window.caches) jobs.push(caches.keys().then(function (ks) { return Promise.all(ks.map(function (k) { return caches.delete(k); })); }));
+          Promise.all(jobs).catch(function () {}).then(function () { location.reload(); });
+        };
+        box.append(h, p, b);
+        app.replaceChildren(box);
+      }
+      window.addEventListener('error', function (e) { if (!window.__appReady && e && e.filename && /\.js/.test(e.filename)) setTimeout(function () { rescue('A file failed to load.'); }, 1500); });
+      setTimeout(function () { rescue('It is taking too long to load.'); }, 8000);
+    })();
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,613 @@
+{
+ "e01q20": {
+  "ref": "The Channel Islands and the Isle of Man are closely linked with the UK but are not part of it. They have their own governments and are called ‘Crown dependencies’."
+ },
+ "e02q02": {
+  "replace": [
+   [
+    "such as St Helena and the Falkland",
+    "such as St Helena and the Falkland Islands. They are also linked to the UK but are not a part of it."
+   ]
+  ]
+ },
+ "e01q13": {
+  "replace": [
+   [
+    "Independent Police Complaints Commission in England",
+    "Independent Police Complaints Commission in England and Wales, the Police Complaints Commissioner for Scotland or the Police Ombudsman for Northern Ireland."
+   ]
+  ],
+  "note": "The Independent Police Complaints Commission was replaced by the Independent Office for Police Conduct in 2018. The handbook still uses the old name."
+ },
+ "e01q16": {
+  "ref": "There are public holidays each year called bank holidays, when banks and many other businesses are closed for the day. They are of no religious significance."
+ },
+ "e03q02": {
+  "replace": [
+   [
+    "Churches in the UK: Inside a Catholic Church There is no established Church in Wales or Northern Ireland.",
+    "There is no established Church in Wales or Northern Ireland. The Church of England is the established Church in England and the Church of Scotland is the national Church in Scotland."
+   ]
+  ]
+ },
+ "e01q07": {
+  "replace": [
+   [
+    "must be a Protestant",
+    "must be a Protestant."
+   ]
+  ]
+ },
+ "e01q05": {
+  "ref": "England, Scotland, Wales and Northern Ireland each have a national saint, called a patron saint. Each saint has a special day: 1 March: St David’s Day (Wales); 17 March: St Patrick’s Day (Northern Ireland); 23 April: St George’s Day (England); 30 November: St Andrew’s Day (Scotland)."
+ },
+ "e02q13": {
+  "ref": "Northern Ireland and Scotland have their own banknotes, which are valid everywhere in the UK. However, shops and businesses do not have to accept them."
+ },
+ "e01q08": {
+  "replace": [
+   [
+    "attended by the Queen, politicians",
+    "attended by the monarch, politicians"
+   ]
+  ]
+ },
+ "e01q02": {
+  "options": {
+   "The Houses of the Parliament": "The Houses of Parliament"
+  }
+ },
+ "e01q17": {
+  "options": {
+   "An specific time for you to vote": "A specific time for you to vote"
+  }
+ },
+ "e01q24": {
+  "options": {
+   "Hannukah": "Hanukkah"
+  }
+ },
+ "e03q03": {
+  "text": "What is New Year’s Eve called in Scotland?",
+  "options": {
+   "Hannukah": "Hanukkah"
+  }
+ },
+ "e03q24": {
+  "options": {
+   "Hannukah": "Hanukkah"
+  }
+ },
+ "e02q08": {
+  "replace": [
+   [
+    "1960’s",
+    "1960s"
+   ]
+  ]
+ },
+ "e02q14": {
+  "options": {
+   "A Midsummer Night’s dream": "A Midsummer Night’s Dream"
+  },
+  "replace": [
+   [
+    "A Midsummer Night’s dream",
+    "A Midsummer Night’s Dream"
+   ]
+  ]
+ },
+ "e03q04": {
+  "replace": [
+   [
+    "church of England",
+    "Church of England"
+   ]
+  ]
+ },
+ "e03q06": {
+  "replace": [
+   [
+    "raised and army",
+    "raised an army"
+   ]
+  ]
+ },
+ "e03q16": {
+  "replace": [
+   [
+    "London’s west end",
+    "London’s West End"
+   ]
+  ]
+ },
+ "e04q07": {
+  "ref": "‘Great Britain’ refers only to England, Scotland and Wales, not to Northern Ireland."
+ },
+ "e04q09": {
+  "options": {
+   "Mo Farat": "Mo Farah"
+  }
+ },
+ "e04q22": {
+  "options": {
+   "Sir Christopher Cockrell": "Sir Christopher Cockerell"
+  }
+ },
+ "e05q06": {
+  "replace": [
+   [
+    "be between 18 to 70 years old",
+    "be aged between 18 and 70"
+   ]
+  ],
+  "note": "England and Wales raised the upper jury age from 70 to 75 in 2016. The handbook, and so the test, still says 18 to 70."
+ },
+ "e05q09": {
+  "ref": "April Fool’s Day, 1 April, is a day when people play jokes on each other until midday. The television and newspapers often have stories that are April Fool jokes."
+ },
+ "e05q10": {
+  "ref": "Charles II was defeated by Cromwell at Worcester and escaped, famously hiding in an oak tree on one occasion."
+ },
+ "e05q12": {
+  "replace": [
+   [
+    "police station and writing",
+    "police station or writing"
+   ]
+  ],
+  "note": "The Independent Police Complaints Commission was replaced by the Independent Office for Police Conduct in 2018. The handbook still uses the old name."
+ },
+ "e05q18": {
+  "replace": [
+   [
+    "later Known as",
+    "later known as"
+   ]
+  ]
+ },
+ "e05q20": {
+  "ref": "Any man who forces a woman to have sex, including a woman’s husband, can be charged with rape."
+ },
+ "e06q03": {
+  "ref": "The Tower of London was first built by William the Conqueror after he became king in 1066."
+ },
+ "e06q08": {
+  "ref": "Charles I was executed in 1649."
+ },
+ "e06q15": {
+  "replace": [
+   [
+    "Swansea it is located",
+    "Swansea is located"
+   ]
+  ]
+ },
+ "e06q16": {
+  "options": {
+   "The Liberal Democrats Party": "The Liberal Democrats"
+  }
+ },
+ "e06q17": {
+  "ref": "Henry VIII established the Church of England when the Pope refused to approve his divorce."
+ },
+ "e06q24": {
+  "ref": "To apply for a National Insurance number you will usually need documents that prove your identity and that you have permission to work in the UK."
+ },
+ "e06q12": {
+  "note": "Individual registration has applied across Great Britain since 2014. The handbook says only Northern Ireland used it, and the test follows the handbook, so the answer is False."
+ },
+ "e07q01": {
+  "ref": "Respecting and obeying the law, and looking after the area in which you live and the environment, are responsibilities of a British citizen."
+ },
+ "e08q03": {
+  "replace": [
+   [
+    "police station and writing",
+    "police station or writing"
+   ]
+  ],
+  "note": "The Independent Police Complaints Commission was replaced by the Independent Office for Police Conduct in 2018. The handbook still uses the old name."
+ },
+ "e08q18": {
+  "options": {
+   "The Normands": "The Normans"
+  }
+ },
+ "e08q20": {
+  "text": "How often are the members of the National Assembly for Wales elected?",
+  "ref": "The National Assembly for Wales has 60 Assembly members (AMs), and elections are held every four years using a form of proportional representation.",
+  "note": "Senedd terms have been five years since 2016, and the Senedd Cymru (Members and Elections) Act 2024 raised its size to 96 members from the 2026 election. The handbook, and so the test, says 60 members elected every four years."
+ },
+ "e09q03": {
+  "ref": "False. The notes in circulation are £5, £10, £20 and £50, so £50 is the highest value note.",
+  "note": "Some Scottish and Northern Irish banks do issue £100 notes. The handbook lists only £5, £10, £20 and £50, and the test follows the handbook."
+ },
+ "e09q15": {
+  "replace": [
+   [
+    "against the Spanish fleet and was killed",
+    "against the combined French and Spanish fleets, and was killed"
+   ]
+  ]
+ },
+ "e09q17": {
+  "replace": [
+   [
+    "lead to the rapid development of the industry",
+    "led to the rapid development of industry"
+   ]
+  ]
+ },
+ "e10q10": {
+  "text": "How many members does the National Assembly for Wales have?",
+  "ref": "The National Assembly for Wales has 60 Assembly members (AMs), and elections are held every four years using a form of proportional representation.",
+  "note": "The Senedd Cymru (Members and Elections) Act 2024 raised the number of members to 96 from the 2026 election. The handbook, and so the test, says 60."
+ },
+ "e10q20": {
+  "replace": [
+   [
+    "Mathematical Principle of",
+    "Mathematical Principles of"
+   ]
+  ]
+ },
+ "e10q18": {
+  "replace": [
+   [
+    "Emmeline Pankhurst she set up the women’s Franchise League",
+    "Emmeline Pankhurst set up the Women’s Franchise League"
+   ]
+  ]
+ },
+ "e11q22": {
+  "replace": [
+   [
+    "women’s Franchise League",
+    "Women’s Franchise League"
+   ]
+  ]
+ },
+ "e11q08": {
+  "options": {
+   "She set up the women’s Franchise League": "She set up the Women’s Franchise League"
+  }
+ },
+ "e11q02": {
+  "ref": "London’s West End, also known as ‘Theatreland’, is particularly well known for its theatres."
+ },
+ "e12q09": {
+  "ref": "The 1960s, known as ‘the Swinging Sixties’, saw growth in British fashion, cinema and popular music."
+ },
+ "e11q07": {
+  "ref": "In the summer of 1940 the Royal Air Force won the crucial aerial battle against the Germans, called ‘the Battle of Britain’."
+ },
+ "e11q10": {
+  "ref": "True. By law, radio and television coverage of the political parties must be balanced, so equal time has to be given to rival viewpoints."
+ },
+ "e11q15": {
+  "replace": [
+   [
+    "William the conqueror",
+    "William the Conqueror"
+   ]
+  ]
+ },
+ "e11q17": {
+  "replace": [
+   [
+    "police station and writing",
+    "police station or writing"
+   ]
+  ],
+  "note": "The Independent Police Complaints Commission was replaced by the Independent Office for Police Conduct in 2018. The handbook still uses the old name."
+ },
+ "e10q12": {
+  "replace": [
+   [
+    "March No1",
+    "March No 1"
+   ]
+  ]
+ },
+ "e10q04": {
+  "replace": [
+   [
+    "called The Canterbury Tales",
+    "called The Canterbury Tales."
+   ]
+  ]
+ },
+ "e11q20": {
+  "text": "Who was the architect that rebuilt St Paul’s Cathedral after the Great Fire in 1666?"
+ },
+ "e12q13": {
+  "replace": [
+   [
+    "telecasted on TV",
+    "broadcast on TV"
+   ]
+  ]
+ },
+ "e12q18": {
+  "note": "England and Wales raised the upper jury age from 70 to 75 in 2016. The handbook, and so the test, still says 18 to 70."
+ },
+ "e13q03": {
+  "options": {
+   "The Normands": "The Normans"
+  }
+ },
+ "e13q05": {
+  "text": "What are public holidays called?"
+ },
+ "e13q11": {
+  "ref": "Elizabeth I was a Protestant."
+ },
+ "e13q13": {
+  "ref": "The Royal Air Force won the aerial Battle of Britain against Germany in the summer of 1940, using the Spitfire and the Hurricane."
+ },
+ "e13q19": {
+  "replace": [
+   [
+    "Ireland and Scotland remained",
+    "Ireland, but Scotland remained"
+   ]
+  ]
+ },
+ "e14q02": {
+  "text": "How are the members of the Northern Ireland Assembly elected?",
+  "replace": [
+   [
+    "has 108 elected members",
+    "has 90 elected members"
+   ]
+  ]
+ },
+ "e14q04": {
+  "replace": [
+   [
+    "Sir Antony Hopkins",
+    "Sir Anthony Hopkins"
+   ]
+  ]
+ },
+ "e14q16": {
+  "ref": "The UK is a parliamentary democracy with the monarch as head of state."
+ },
+ "e14q17": {
+  "ref": "The Ulster fry is the traditional food of Northern Ireland: a fried meal with bacon, eggs, sausage, black and white pudding, tomatoes, mushrooms, soda bread and potato bread."
+ },
+ "e15q02": {
+  "text": "In 1776, which British colonies declared their independence because they demanded that there should be ‘no taxation without representation’?"
+ },
+ "e15q03": {
+  "options": {
+   "When the Carta Magna restricted the king’s power": "When Magna Carta restricted the king’s power",
+   "When kind Harold died after the Battle of Hastings": "When King Harold died at the Battle of Hastings"
+  }
+ },
+ "e15q09": {
+  "text": "In England, Wales and Northern Ireland, Youth Court cases are normally heard by whom (choose TWO answers)?"
+ },
+ "e15q11": {
+  "options": {
+   "The Carta Magna": "Magna Carta"
+  }
+ },
+ "e15q13": {
+  "ref": "Auld Lang Syne, by the Scottish poet Robert Burns, is sung by people in the UK and other countries when they are celebrating the New Year (or Hogmanay as it is called in Scotland)."
+ },
+ "e15q23": {
+  "ref": "Wallace and Gromit are animated films. Their creator Nick Park has won four Oscars for his animated films, including three for films featuring Wallace and Gromit."
+ },
+ "e15q24": {
+  "ref": "In the UK, violence in the home is a serious crime. Anyone who is violent towards their partner, whether a man or a woman, married or living together, can be prosecuted."
+ },
+ "e16q07": {
+  "text": "Who was invited back from exile in the Netherlands to become monarch in 1660?"
+ },
+ "e16q14": {
+  "replace": [
+   [
+    "£3,000 in Scotland and Northern Ireland",
+    "£5,000 in Scotland and Northern Ireland"
+   ]
+  ]
+ },
+ "e16q18": {
+  "text": "Which Paralympic athlete has won gold medals for swimming at the 2008 and 2012 Paralympic Games?",
+  "replace": [
+   [
+    "2008, 2012 and 2016 Paralympic Games",
+    "2008 and 2012 Paralympic Games"
+   ]
+  ]
+ },
+ "e16q22": {
+  "ref": "The Reformation was a movement against the authority of the Pope and the ideas and practices of the Roman Catholic Church. It happened across Europe in the time of Henry VIII."
+ },
+ "e17q10": {
+  "options": {
+   "To advise, warn and encourage the Prime Minister\\'s decisions on government policies": "To advise, warn and encourage the Prime Minister’s decisions on government policies"
+  }
+ },
+ "e17q13": {
+  "ref": "The Speaker is neutral and does not represent a political party, even though he or she is an MP, represents a constituency and deals with constituents’ problems like any other MP."
+ },
+ "e17q15": {
+  "options": {
+   "MacBeth": "Macbeth"
+  },
+  "replace": [
+   [
+    "MacBeth",
+    "Macbeth"
+   ]
+  ]
+ },
+ "e17q17": {
+  "text": "What were the settlers from the Netherlands, with whom the British went to war in South Africa, called?"
+ },
+ "e17q18": {
+  "ref": "In England, Wales and Northern Ireland, a Youth Court case (accused aged 10 to 17) is normally heard in front of up to three specially trained magistrates or a District Judge."
+ },
+ "e17q19": {
+  "text": "What made Roger Bannister famous?",
+  "options": {
+   "He was the first British to climb Mount Everest.": "He was the first Briton to climb Mount Everest."
+  }
+ },
+ "e17q20": {
+  "text": "Who was invited to invade and rule England in 1688?"
+ },
+ "e18q01": {
+  "text": "What are Members of Parliament (MPs) called if they do not represent any of the main political parties?",
+  "options": {
+   "independents": "Independents"
+  }
+ },
+ "e18q02": {
+  "text": "Which British racing driver is named in the handbook as a recent winner of the Formula 1 World Championship?",
+  "options": {
+   "Sir Jackie Stewart": "Sir Ian Botham"
+  },
+  "ref": "A number of British Grand Prix drivers have won the Formula 1 World Championship. Recent British winners include Damon Hill, Lewis Hamilton and Jenson Button."
+ },
+ "e18q03": {
+  "ref": "In 1810 Sake Dean Mahomet opened the Hindoostane Coffee House in George Street, London. It was the first curry house to open in Britain."
+ },
+ "e18q04": {
+  "text": "Damon Hill, Lewis Hamilton and Jenson Button are known for which sport?",
+  "ref": "There is a long history of motor sport in the UK. Recent British Formula 1 World Championship winners include Damon Hill, Lewis Hamilton and Jenson Button."
+ },
+ "e18q05": {
+  "text": "What is the limit for the small claims procedure in Northern Ireland and Scotland?",
+  "options": {
+   "1000": "£1,000",
+   "3000": "£3,000",
+   "5000": "£5,000",
+   "10000": "£10,000"
+  },
+  "ref": "The small claims procedure is used for claims of less than £10,000 in England and Wales and £5,000 in Scotland and Northern Ireland."
+ },
+ "e18q06": {
+  "ref": "Sir Edward Elgar’s best-known work is probably the Pomp and Circumstance Marches. March No 1 (Land of Hope and Glory) is usually played at the Last Night of the Proms."
+ },
+ "e18q07": {
+  "text": "Where does the UK government sit?",
+  "options": {
+   "The Parliament House": "Holyrood"
+  },
+  "ref": "The UK is governed by the parliament sitting in Westminster."
+ },
+ "e18q08": {
+  "text": "During the 18th century, what important role appeared in Parliament?",
+  "ref": "George I relied on his ministers. The most important minister in Parliament became known as the Prime Minister. The first man to be called this was Sir Robert Walpole, Prime Minister from 1721 to 1742."
+ },
+ "e18q09": {
+  "text": "Which tribes came to Britain from northern Europe after the Romans left in AD 410?",
+  "options": {
+   "Angels": "Angles",
+   "Norman": "Normans"
+  },
+  "ref": "Britain was invaded by tribes from northern Europe: the Jutes, the Angles and the Saxons."
+ },
+ "e18q10": {
+  "options": {
+   "Elizabeth": "Elizabeth of York"
+  },
+  "ref": "Henry Tudor became King Henry VII after the Wars of the Roses and married King Richard’s niece, Elizabeth of York, uniting the Houses of Lancaster and York."
+ },
+ "e18q11": {
+  "ref": "Pub quizzes are popular. Pool and darts are traditional pub games."
+ },
+ "e18q12": {
+  "text": "In which battle did William, Duke of Normandy, defeat Harold, the Saxon king of England?",
+  "ref": "In 1066, William, Duke of Normandy, defeated Harold, the Saxon king of England, at the Battle of Hastings."
+ },
+ "e18q14": {
+  "text": "What was the biggest source of employment in Britain before the 18th century?",
+  "ref": "Before the 18th century, agriculture was the biggest source of employment in Britain."
+ },
+ "e18q15": {
+  "text": "Which of the following is an aim of the North Atlantic Treaty Organization (NATO)?",
+  "options": {
+   "To regulate international trade and economic policies among its members.": "To regulate international trade and economic policies among its members"
+  },
+  "ref": "NATO is a group of European and North American countries that have agreed to help each other if they come under attack. It also aims to maintain peace between all of its members."
+ },
+ "e18q16": {
+  "text": "What name is used for the bombing campaign in which Germany bombed London and other UK cities at night during the Second World War?",
+  "ref": "The German air force continued bombing London and other British cities at night. This was called the Blitz."
+ },
+ "e18q17": {
+  "text": "In Northern Ireland, cases in the Magistrates’ Court are heard by a District Judge who is legally qualified."
+ },
+ "e18q18": {
+  "ref": "The Welsh Assembly has the power to make laws for Wales in 20 areas, including education and training and health and social services. Since 2011 it can pass laws on these topics without the agreement of the UK Parliament."
+ },
+ "e18q19": {
+  "text": "Arranged marriages, where both parties agree to the marriage, are acceptable in the UK.",
+  "options": {
+   "true": "True",
+   "false": "False"
+  },
+  "ref": "Arranged marriages, where both parties agree to the marriage, are acceptable in the UK. Forced marriage is a criminal offence."
+ },
+ "e18q20": {
+  "text": "Is the Scottish Parliament located in Glasgow?",
+  "options": {
+   "true": "True",
+   "false": "False"
+  },
+  "ref": "The Scottish Parliament sits in Edinburgh, the capital city of Scotland."
+ },
+ "e18q21": {
+  "text": "Do I need a TV licence if I only watch TV on a computer?",
+  "options": {
+   "yes": "Yes",
+   "no": "No"
+  },
+  "ref": "Everyone in the UK with a TV, computer or other medium which can be used for watching TV must have a television licence."
+ },
+ "e18q22": {
+  "text": "Which traditional dish of Northern Ireland is a fried meal of bacon, eggs, sausage, black pudding, white pudding, tomatoes, mushrooms, soda bread and potato bread?",
+  "options": {
+   "English breakfast": "Roast beef",
+   "Welsh cake": "Welsh cakes"
+  },
+  "ref": "Northern Ireland: Ulster fry – a fried meal with bacon, eggs, sausage, black pudding, white pudding, tomatoes, mushrooms, soda bread and potato bread."
+ },
+ "e18q23": {
+  "text": "What are the British scientists Sir Ian Wilmot and Keith Campbell famous for?",
+  "options": {
+   "Clone a mammal, Dolly the sheep.": "Cloning a mammal, Dolly the sheep."
+  },
+  "ref": "In 1996, Sir Ian Wilmot and Keith Campbell led a team which was the first to succeed in cloning a mammal, Dolly the sheep."
+ },
+ "e18q24": {
+  "ref": "1 March: St David’s Day (Wales); 17 March: St Patrick’s Day (Northern Ireland); 23 April: St George’s Day (England); 30 November: St Andrew’s Day (Scotland)."
+ },
+ "e18q25": {
+  "text": "Which TWO of these are long-running British soap operas?",
+  "ref": "British television shows a wide variety of programmes. Popular programmes include regular soap operas such as Coronation Street and EastEnders."
+ },
+ "e18q26": {
+  "text": "Under whose reign did the 13 North American colonies declare their independence in 1776?",
+  "options": {
+   "Elizebeth I": "Elizabeth I"
+  },
+  "ref": "In 1776, 13 American colonies declared their independence, stating that people had a right to establish their own governments. The king at the time was George III."
+ },
+ "e18q27": {
+  "text": "Are members of the Scottish Parliament (MSPs) elected by a form of proportional representation?",
+  "options": {
+   "yes": "Yes",
+   "no": "No"
+  },
+  "ref": "The Scottish Parliament has 129 members (MSPs), elected by a form of proportional representation."
+ },
+ "e18q13": {
+  "ref": "The Turing Award is the leading award in computer science. The handbook does not mention the award itself, but it does describe Alan Turing, whose theoretical ‘Turing machine’ was influential in the development of the modern-day computer."
+ }
+}
