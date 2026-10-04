@@ -45,7 +45,7 @@ Progress is saved **per address**: `localhost:8080`, `127.0.0.1:8080` and your d
 
 All paths are relative, so it works from a sub-path.
 
-> **Licensing note.** The question data comes from <https://github.com/DHKLeung/life-in-the-uk-test>, which has no licence file. The handbook is Crown copyright. Keep your copy private if you can, or ask the author before publishing it publicly.
+> **Licence.** The code is MIT-licensed (see `LICENSE`). The question data and handbook wording are third-party content and are *not* covered by it: see `NOTICE.md`.
 
 ### Updating after you deploy
 
