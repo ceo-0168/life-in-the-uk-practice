@@ -12,7 +12,7 @@
 
 <br>
 
-<img src="docs/img/home.png" alt="Home screen showing today's goal, a streak, test readiness and quick practice options" width="215"> &nbsp; <img src="docs/img/question.png" alt="A question with instant feedback: wrong answer marked, correct answers shown, and a handbook explanation" width="215"> &nbsp; <img src="docs/img/stats.png" alt="Stats screen with accuracy trend, activity map and mock test results" width="215">
+<img src="docs/img/welcome.png" alt="Welcome screen explaining the app, with a Start with 10 questions button" width="170"> &nbsp; <img src="docs/img/home.png" alt="Home screen showing today's goal, a streak, test readiness and quick practice options" width="170"> &nbsp; <img src="docs/img/question.png" alt="A question with instant feedback: wrong answer marked, correct answers shown, and a handbook explanation" width="170"> &nbsp; <img src="docs/img/stats.png" alt="Stats screen with accuracy trend, activity map and mock test results" width="170">
 
 <sub>Screenshots use demo progress.</sub>
 
