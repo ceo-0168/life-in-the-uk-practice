@@ -431,3 +431,30 @@ textarea.input { min-height: 0; resize: vertical; }
 .prev h4 { margin: 0 0 4px; }
 .prev .setting { border-top: 0; padding: 8px 0; }
 .nav-cell:focus-visible, .opt:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+
+/* ---------- welcome (first visit) ---------- */
+.welcome { gap: 14px; }
+.whero { background: var(--primary); color: var(--primary-ink); border-radius: calc(var(--radius) + 4px); padding: 24px 20px; display: flex; flex-direction: column; gap: 14px; }
+.whero .eyebrow { color: inherit; opacity: .8; }
+.whero h1 { margin: 0; font-size: 1.85rem; line-height: 1.15; letter-spacing: -.02em; }
+.whero p { margin: 0; opacity: .92; }
+.whero-links { text-align: center; font-size: .92rem; }
+.linkbtn { background: none; border: 0; padding: 6px 4px; color: inherit; font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; }
+.linkbtn:hover { opacity: .8; }
+.btn-light { background: #fff; color: #14306b; border-color: #fff; }
+.btn-light:hover:not(:disabled) { background: #eef2fb; }
+.wh2 { margin: 0 0 12px; font-size: 1.1rem; }
+.wsteps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.wstep { display: flex; gap: 14px; align-items: flex-start; }
+.wstep h3 { margin: 0 0 2px; font-size: 1rem; }
+.wstep p { margin: 0; }
+.wstep-n { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); font-weight: 800; }
+.wfacts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+.wfact { text-align: center; background: var(--surface-2); border-radius: 12px; padding: 12px 6px; }
+.wfact-n { font-size: 1.6rem; font-weight: 800; letter-spacing: -.02em; color: var(--primary); }
+.wfact-l { font-size: .8rem; color: var(--muted); }
+.wnotes { display: flex; flex-direction: column; gap: 12px; }
+.wnotes p { margin: 0; display: flex; gap: 10px; align-items: flex-start; font-size: .92rem; color: var(--muted); }
+.wnotes p strong { color: var(--text); }
+.wnotes .icon { margin-top: 2px; color: var(--primary); }
+#test-date { max-width: 220px; }

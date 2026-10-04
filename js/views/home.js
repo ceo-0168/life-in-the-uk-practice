@@ -1,8 +1,9 @@
-import { counts, readiness, verdict, daysToTest, streakDays, todayCount, selectQuestions, isDue, MOCK } from '../engine.js';
+import { counts, readiness, verdict, daysToTest, streakDays, todayCount, selectQuestions, isDue, shouldShowWelcome, MOCK } from '../engine.js';
 import * as store from '../store.js';
 import { bank, cards } from '../ctx.js';
 import { startSession } from '../session.js';
 import { h, icon, pct, stackedBar, timeAgo } from '../ui.js';
+import { renderWelcome } from './welcome.js';
 
 export function planFor(state, cs) {
   const goal = state.settings.dailyGoal;
@@ -16,6 +17,7 @@ export function planFor(state, cs) {
 
 export function renderHome(root) {
   const state = store.getState();
+  if (shouldShowWelcome(state)) return renderWelcome(root, { redraw: () => renderHome(root) });
   const cs = cards();
   const c = counts(cs);
   const ready = readiness(cs);

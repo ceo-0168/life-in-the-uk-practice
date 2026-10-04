@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import {
   isCorrect, optionOrder, deriveCards, counts, daysToTest, intervalDays, streakDays,
   selectQuestions, mergeStates, validateState, normalizeState, emptyState, readiness, verdict, examBreakdown,
-  todayCount, activityByDay, MOCK, buildMock, dayKey,
+  todayCount, activityByDay, MOCK, buildMock, dayKey, shouldShowWelcome,
 } from '../js/engine.js';
 
 const bank = JSON.parse(readFileSync(new URL('../data/questions.json', import.meta.url)));
@@ -264,4 +264,16 @@ test('merge never changes what the cards say about answers both sides already ha
   const ab = deriveCards(mergeStates(A, B).attempts, Q, {}, NOW);
   const ba = deriveCards(mergeStates(B, A).attempts, Q, {}, NOW);
   assert.deepEqual([...ab], [...ba], 'commutative');
+});
+
+test('the welcome screen is only for brand-new visitors', () => {
+  const fresh = emptyState();
+  assert.equal(shouldShowWelcome(fresh), true);
+  assert.equal(shouldShowWelcome({ ...fresh, settings: { ...fresh.settings, welcomed: true } }), false, 'dismissed');
+  assert.equal(shouldShowWelcome({ ...fresh, attempts: [att(Q[0].id, true, NOW)] }), false, 'has answers');
+  assert.equal(shouldShowWelcome({ ...fresh, sessions: [{ id: 's' }] }), false, 'has history');
+  // an imported backup or an existing user's saved data (which has no "welcomed" field) never triggers it
+  const legacy = normalizeState({ attempts: [{ id: 'a', q: 'x', t: 1, ok: true }], sessions: [], meta: {}, settings: {} }).state;
+  assert.equal(shouldShowWelcome(legacy), false);
+  assert.equal(normalizeState({ attempts: [], sessions: [], settings: { welcomed: 'yes' } }).state.settings.welcomed, false, 'non-boolean is ignored');
 });

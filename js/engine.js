@@ -280,7 +280,13 @@ export function defaultSettings() {
     shuffleQuestions: true,
     theme: 'auto',
     sessionLength: 20,
+    welcomed: false,
   };
+}
+
+/** The first-visit welcome screen: only for someone with no history who hasn't dismissed it. */
+export function shouldShowWelcome(state) {
+  return !state.settings.welcomed && state.attempts.length === 0 && state.sessions.length === 0;
 }
 
 export function emptyState() {
@@ -323,6 +329,7 @@ function normalizeSettings(raw) {
     shuffleQuestions: typeof r.shuffleQuestions === 'boolean' ? r.shuffleQuestions : d.shuffleQuestions,
     theme: pick('theme'),
     sessionLength: pick('sessionLength'),
+    welcomed: typeof r.welcomed === 'boolean' ? r.welcomed : d.welcomed,
   };
 }
 
