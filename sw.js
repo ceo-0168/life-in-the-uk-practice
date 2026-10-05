@@ -4,7 +4,7 @@
 // browser's HTTP cache, and only replaces the old set once every file has arrived (install is all-or-nothing).
 // Files are never refreshed one by one, so the app can never run with a mixture of old and new files.
 // VERSION is stamped from the content of the files by `npm run stamp`; a test fails if it is stale.
-const VERSION = 'd3210a8e75c4';
+const VERSION = 'c22227d3ee71';
 const CACHE = `litukp-${VERSION}`;
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest', 'css/styles.css',

@@ -2,6 +2,7 @@ import * as store from '../store.js';
 import { daysToTest, SETTING_CHOICES } from '../engine.js';
 import { h, icon, toast, confirmDialog, timeAgo } from '../ui.js';
 import { t, tn, getLocale } from '../i18n.js';
+import { bank } from '../ctx.js';
 import { coffeeButton } from './support.js';
 import { langPicker } from './lang.js';
 
@@ -12,6 +13,16 @@ function backupFile() {
   const text = JSON.stringify(store.exportData(), null, 1);
   const name = `life-in-uk-progress-${new Date().toISOString().slice(0, 10)}.json`;
   return { text, name, file: new File([text], name, { type: 'application/json' }) };
+}
+
+const SOURCE_URL = 'https://github.com/ceo-0168/life-in-the-uk-practice';
+const UPSTREAM = 'DHKLeung/life-in-the-uk-test';
+
+/** The credits line, with the upstream project as a link. Small and muted: attribution without leading with it. */
+function credits() {
+  const [before, after = ''] = t('st.about.credits', { src: '\u0000' }).split('\u0000');
+  return h('p', { class: 'credits' }, before,
+    h('a', { href: `https://github.com/${UPSTREAM}`, target: '_blank', rel: 'noopener noreferrer' }, UPSTREAM), after);
 }
 
 const fmtWhen = (ts) => new Date(ts).toLocaleString(getLocale(), { dateStyle: 'medium', timeStyle: 'short' });
@@ -168,11 +179,17 @@ export function renderSettings(root, { applyTheme }) {
         ? h('div', { class: 'banner banner-info', style: 'margin-top:12px' }, icon('shield', 18), t('st.iosBanner'))
         : null,
       prevSection),
-    h('section', { class: 'card' },
+    h('section', { class: 'card about' },
       h('h3', null, t('st.about.title')),
-      h('p', { class: 'muted' }, t('st.about.body')),
+      h('p', null, t('st.about.intro')),
+      h('p', { class: 'about-facts' }, t('st.about.facts', { q: bank.questions.length, e: bank.meta.exams.length })),
+      ['accurate', 'mistake', 'private', 'unofficial'].map((k) => h('p', { class: 'about-point' }, h('strong', null, t(`st.about.${k}.title`) + ' '), t(`st.about.${k}.body`))),
       h('p', { class: 'muted' }, t('st.about.free')),
-      h('div', { class: 'btn-row' }, coffeeButton()),
+      h('div', { class: 'btn-row' }, coffeeButton(),
+        h('a', { class: 'btn', href: SOURCE_URL, target: '_blank', rel: 'noopener noreferrer' }, icon('list', 18), t('st.about.source'))),
+      credits()),
+    h('section', { class: 'card' },
+      h('h3', null, t('st.erase')),
       h('button', { class: 'btn btn-danger btn-sm', onClick: reset }, t('st.erase')))));
   return () => {};
 }

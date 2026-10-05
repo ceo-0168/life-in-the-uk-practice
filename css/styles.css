@@ -482,3 +482,13 @@ textarea.input { min-height: 0; resize: vertical; }
 .lang-seg .seg-btn { white-space: nowrap; }
 
 p, li, .muted { text-wrap: pretty; }
+
+/* ---------- about ---------- */
+.about .about-facts { font-weight: 700; color: var(--primary); background: var(--primary-soft); border-radius: 10px; padding: 10px 12px; margin: 12px 0; }
+.about .about-point { color: var(--muted); font-size: .95rem; }
+.about .about-point strong { color: var(--text); }
+.about .about-point + .about-point { margin-top: 8px; }
+.about > p.muted { margin-top: 14px; }
+.credits { margin-top: 14px; font-size: .8rem; color: var(--muted); }
+.credits a { color: inherit; text-decoration: underline; }
+.about .about-facts { text-wrap: balance; }
