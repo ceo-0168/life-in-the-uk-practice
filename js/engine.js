@@ -270,6 +270,7 @@ export const SETTING_CHOICES = {
   dailyGoal: [10, 20, 30, 50, 100],
   sessionLength: [0, 10, 20, 50],
   theme: ['auto', 'light', 'dark'],
+  lang: ['auto', 'en', 'zh-Hant', 'zh-Hans'],
 };
 
 export function defaultSettings() {
@@ -283,6 +284,7 @@ export function defaultSettings() {
     welcomed: false,
     supportShownAt: 0,
     supportHiddenUntil: 0,
+    lang: 'auto',
   };
 }
 
@@ -329,8 +331,8 @@ const num = (v, d = 0) => (Number.isFinite(v) ? v : d);
 
 /** Structural check: is this recognisably a progress document at all? Returns an error string or null. */
 export function validateState(obj) {
-  if (!isObj(obj)) return 'Not a valid backup file.';
-  if (!Array.isArray(obj.attempts) || !Array.isArray(obj.sessions)) return 'Backup file is missing progress data.';
+  if (!isObj(obj)) return 'err.notBackup';
+  if (!Array.isArray(obj.attempts) || !Array.isArray(obj.sessions)) return 'err.missingData';
   return null;
 }
 
@@ -352,6 +354,7 @@ function normalizeSettings(raw) {
     welcomed: typeof r.welcomed === 'boolean' ? r.welcomed : d.welcomed,
     supportShownAt: num(r.supportShownAt),
     supportHiddenUntil: num(r.supportHiddenUntil),
+    lang: pick('lang'),
   };
 }
 

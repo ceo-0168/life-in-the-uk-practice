@@ -9,6 +9,7 @@
 //     "previous copies" list that nothing overwrites automatically. Settings → Restore brings it back.
 //  4. Unreadable raw data is set aside under its own key instead of being overwritten.
 import { emptyState, validateState, normalizeState, mergeStates, uid, dayKey } from './engine.js';
+import { t, tn, getLocale } from './i18n.js';
 
 const APP = 'life-in-the-uk-practice';
 const KEY = 'litukp:state:v1';
@@ -19,7 +20,6 @@ const ACTIVE = 'litukp:active:v1';
 const SNAPSHOT_EVERY_MS = 10 * 60 * 1000;
 const SNAPSHOT_EVERY_ANSWERS = 25;
 const PREV_KEEP = 2;
-const SAVE_ERROR = 'Progress could not be saved: browser storage is full or blocked. Download a backup now (Settings).';
 
 let state = emptyState();
 let health = { ok: true, message: '', notice: '' };
@@ -68,10 +68,10 @@ function write(key, value, { critical = true } = {}) {
   } catch (err) {
     console.error('storage write failed', key, err);
     if (critical) {
-      health = { ...health, ok: false, message: SAVE_ERROR };
+      health = { ...health, ok: false, message: t('store.saveError') };
       if (errorHandler && Date.now() - lastErrorAt > 20000) {
         lastErrorAt = Date.now();
-        errorHandler(SAVE_ERROR);
+        errorHandler(t('store.saveError'));
       }
     }
     return false;
@@ -96,10 +96,10 @@ export function init() {
     if (fromSnap) {
       loaded = fromSnap;
       recovered = true;
-      const when = snap.at ? new Date(snap.at).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : snap.day;
-      health.notice = `Your latest data could not be read, so progress was restored from the automatic backup of ${when}. Anything newer than that was lost.`;
+      const when = snap.at ? new Date(snap.at).toLocaleString(getLocale(), { dateStyle: 'medium', timeStyle: 'short' }) : snap.day;
+      health.notice = t('store.recovered', { when });
     } else if (raw !== null) {
-      health.notice = 'Your saved progress could not be read and there is no automatic backup. The unreadable data was kept aside; import a backup file in Settings to restore.';
+      health.notice = t('store.unreadable');
     }
   }
   state = loaded || normalizeState({}).state;
@@ -263,52 +263,52 @@ function replaceState(next) {
   takeSnapshot(true);
 }
 
-const NO_SAFETY_COPY = { ok: false, message: 'Could not save a safety copy (browser storage is full), so nothing was changed. Download a backup first.' };
+const noSafetyCopy = () => ({ ok: false, message: t('store.noSafetyCopy') });
 
 export function restorePrev(index) {
   const list = readJSON(PREV);
   const entry = Array.isArray(list) ? list[index] : null;
   const restored = entry && parseState(entry.state);
-  if (!restored) return { ok: false, message: 'That copy could not be read.' };
+  if (!restored) return { ok: false, message: t('store.copyUnreadable') };
   reconcile();
-  if (!pushPrev('before restore')) return NO_SAFETY_COPY;
+  if (!pushPrev('before restore')) return noSafetyCopy();
   replaceState(restored);
-  return { ok: true, message: `Restored ${state.attempts.length} answers.` };
+  return { ok: true, message: t('store.restored', { n: state.attempts.length }) };
 }
 
 /** mode: 'merge' (union of both devices) or 'replace'. Returns {ok, message}. */
 export function importData(obj, mode) {
   const incomingRaw = obj && obj.app === APP ? obj.state : obj;
   const problem = validateState(incomingRaw);
-  if (problem) return { ok: false, message: problem };
+  if (problem) return { ok: false, message: t(problem) };
   const { state: incoming, dropped } = normalizeState(incomingRaw);
   if (incomingRaw.attempts.length > 0 && incoming.attempts.length === 0) {
-    return { ok: false, message: 'None of the answers in this file could be read.' };
+    return { ok: false, message: t('store.noneReadable') };
   }
   const skipped = dropped.attempts + dropped.sessions;
-  const skippedNote = skipped ? ` (${skipped} unreadable entr${skipped === 1 ? 'y' : 'ies'} skipped)` : '';
+  const skippedNote = skipped ? ' ' + tn('store.skipped', skipped) : '';
 
   reconcile();
   if (mode === 'replace') {
-    if (!pushPrev('before import')) return NO_SAFETY_COPY;
+    if (!pushPrev('before import')) return noSafetyCopy();
     replaceState(incoming);
-    return { ok: true, message: `Replaced progress with ${state.attempts.length} answers${skippedNote}. Your previous progress was kept under Settings → Previous copies.` };
+    return { ok: true, message: t('store.replaced', { n: state.attempts.length, skipped: skippedNote }) };
   }
   const before = state.attempts.length;
   state = mergeStates(state, incoming);
   const added = state.attempts.length - before;
   state.unsaved = (state.unsaved || 0) + added;
   commit({ destructive: true }); // already merged with the stored copy above
-  return { ok: true, message: `Merged backup: ${added} new answer${added === 1 ? '' : 's'} added${skippedNote}.` };
+  return { ok: true, message: tn('store.merged', added, { skipped: skippedNote }) };
 }
 
 export function resetAll() {
   reconcile();
-  if (!pushPrev('before erase')) return NO_SAFETY_COPY;
+  if (!pushPrev('before erase')) return noSafetyCopy();
   const { settings, settingsAt } = state;
   clearActive();
   replaceState(normalizeState({ settings, settingsAt }).state);
-  return { ok: true, message: 'Progress erased. A safety copy is under Settings → Previous copies.' };
+  return { ok: true, message: t('store.erased') };
 }
 
 // ----- live session (so a refresh or accidental close never loses place) -----

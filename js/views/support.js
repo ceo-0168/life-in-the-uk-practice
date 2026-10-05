@@ -3,22 +3,18 @@
 import { SUPPORT, canAskForSupport } from '../engine.js';
 import * as store from '../store.js';
 import { h, icon } from '../ui.js';
+import { t } from '../i18n.js';
 
 export const SUPPORT_URL = 'https://buymeacoffee.com/ryanchan';
 const DAY = 86400000;
-
-const COPY = {
-  pass: { title: 'You passed the mock! 🎉', body: 'This app is free, ad-free and made by one person. If it helped you get ready, a coffee helps me keep the questions checked and the app improving.' },
-  good: { title: 'Strong session. Nice work.', body: 'This app is free, ad-free and made by one person. If it is helping, a coffee helps me keep improving it.' },
-  home: { title: 'Finding it useful?', body: 'This app is free and ad-free, and made by one person. If it is helping you prepare, a coffee helps me keep it updated.' },
-};
+const KINDS = ['pass', 'good', 'home'];
 
 /** The yellow "Buy me a coffee" button. Opens in a new tab; nothing is sent from the app. */
 export function coffeeButton({ onClick } = {}) {
   return h('a', {
     class: 'btn btn-coffee', href: SUPPORT_URL, target: '_blank', rel: 'noopener noreferrer',
     onClick: () => onClick?.(),
-  }, icon('coffee', 18), 'Buy me a coffee');
+  }, icon('coffee', 18), t('support.button'));
 }
 
 /**
@@ -27,21 +23,20 @@ export function coffeeButton({ onClick } = {}) {
  */
 export function supportCard(kind, { onGone } = {}) {
   const state = store.getState();
-  if (!COPY[kind] || !canAskForSupport(state)) return null;
+  if (!KINDS.includes(kind) || !canAskForSupport(state)) return null;
   store.setSettings({ supportShownAt: Date.now() });
 
-  const card = h('section', { class: 'card support', 'aria-label': 'Support this app' });
+  const card = h('section', { class: 'card support', 'aria-label': t('support.aria') });
   const close = (days) => {
     store.setSettings({ supportHiddenUntil: Date.now() + days * DAY });
     card.remove();
     onGone?.();
   };
-  const { title, body } = COPY[kind];
   card.append(
-    h('h3', null, title),
-    h('p', null, body),
+    h('h3', null, t(`support.${kind}.title`)),
+    h('p', null, t(`support.${kind}.body`)),
     h('div', { class: 'support-actions' },
       coffeeButton({ onClick: () => store.setSettings({ supportHiddenUntil: Date.now() + SUPPORT.thankedDays * DAY }) }),
-      h('button', { class: 'linkbtn', onClick: () => close(SUPPORT.hideDays) }, 'Not now')));
+      h('button', { class: 'linkbtn', onClick: () => close(SUPPORT.hideDays) }, t('support.notNow'))));
   return card;
 }

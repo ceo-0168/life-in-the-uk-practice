@@ -23,17 +23,29 @@
        "Reset app files" removes cached app code only. Your progress is stored separately and is not touched. -->
   <script>
     (function () {
+      // The app's own translations aren't running here, so this screen carries its own tiny dictionary.
+      var T = {
+        en: { title: 'The app did not start', slow: 'It is taking too long to load.', fail: 'A file failed to load.', body: ' Your progress is safe. Resetting the app files re-downloads the app and does not touch your progress.', btn: 'Reset app files and reload' },
+        hant: { title: '應用程式無法啟動', slow: '載入時間過長。', fail: '有檔案載入失敗。', body: '你的進度是安全的。重設應用程式檔案會重新下載應用程式，不會影響你的進度。', btn: '重設應用程式檔案並重新載入' },
+        hans: { title: '应用无法启动', slow: '加载时间过长。', fail: '有文件加载失败。', body: '你的进度是安全的。重置应用文件会重新下载应用，不会影响你的进度。', btn: '重置应用文件并重新加载' }
+      };
+      function pick() {
+        var l = String((navigator.languages && navigator.languages[0]) || navigator.language || 'en').toLowerCase();
+        if (l.indexOf('zh') !== 0) return T.en;
+        return /hant|-hk|-mo|-tw/.test(l) ? T.hant : T.hans;
+      }
       function rescue(why) {
         if (window.__appReady || document.getElementById('rescue')) return;
         var app = document.getElementById('app');
         if (!app) return;
+        var X = pick();
         var box = document.createElement('div');
         box.id = 'rescue';
         box.className = 'card rescue';
-        var h = document.createElement('h3'); h.textContent = 'The app did not start';
+        var h = document.createElement('h3'); h.textContent = X.title;
         var p = document.createElement('p'); p.className = 'muted';
-        p.textContent = why + ' Your progress is safe. Resetting the app files re-downloads the app and does not touch your progress.';
-        var b = document.createElement('button'); b.className = 'btn btn-primary'; b.textContent = 'Reset app files and reload';
+        p.textContent = (why === 'fail' ? X.fail : X.slow) + ' ' + X.body.replace(/^ /, '');
+        var b = document.createElement('button'); b.className = 'btn btn-primary'; b.textContent = X.btn;
         b.onclick = function () {
           var jobs = [];
           if (navigator.serviceWorker) jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) { return Promise.all(rs.map(function (r) { return r.unregister(); })); }));
@@ -43,8 +55,8 @@
         box.append(h, p, b);
         app.replaceChildren(box);
       }
-      window.addEventListener('error', function (e) { if (!window.__appReady && e && e.filename && /\.js/.test(e.filename)) setTimeout(function () { rescue('A file failed to load.'); }, 1500); });
-      setTimeout(function () { rescue('It is taking too long to load.'); }, 8000);
+      window.addEventListener('error', function (e) { if (!window.__appReady && e && e.filename && /\.js/.test(e.filename)) setTimeout(function () { rescue('fail'); }, 1500); });
+      setTimeout(function () { rescue('slow'); }, 8000);
     })();
   </script>
   <script type="module" src="js/main.js"></script>

@@ -1,4 +1,5 @@
 // Tiny DOM helpers. Text is always inserted as text nodes, never as HTML.
+import { t, tn, getLocale } from './i18n.js';
 
 const DIRECT = new Set(['value', 'checked', 'disabled', 'hidden', 'selected', 'open', 'tabIndex', 'textContent']);
 
@@ -104,7 +105,7 @@ export function announce(message) {
 }
 
 /** Promise-based confirm dialog. */
-export function confirmDialog({ title, body, confirm = 'Confirm', cancel = 'Cancel', danger = false, requireText = null }) {
+export function confirmDialog({ title, body, confirm = t('common.confirm'), cancel = t('common.cancel'), danger = false, requireText = null }) {
   if (typeof HTMLDialogElement === 'undefined' || typeof HTMLDialogElement.prototype.showModal !== 'function') {
     return Promise.resolve(window.confirm(`${title}\n\n${body}`));
   }
@@ -113,7 +114,7 @@ export function confirmDialog({ title, body, confirm = 'Confirm', cancel = 'Canc
     const ok = h('button', { class: 'btn ' + (danger ? 'btn-danger' : 'btn-primary'), type: 'submit', value: 'ok', disabled: !!requireText }, confirm);
     if (requireText) {
       input = h('input', {
-        class: 'input', type: 'text', placeholder: `Type ${requireText} to confirm`, autocomplete: 'off',
+        class: 'input', type: 'text', placeholder: t('dialog.typeToConfirm', { word: requireText }), autocomplete: 'off',
         onInput: () => { ok.disabled = input.value.trim().toLowerCase() !== requireText.toLowerCase(); },
       });
     }
@@ -140,18 +141,29 @@ export function fmtDuration(ms) {
 }
 
 export function fmtDate(ts) {
-  return new Date(ts).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  return new Date(ts).toLocaleDateString(getLocale(), { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 export function timeAgo(ts) {
-  if (!ts) return 'never';
+  if (!ts) return t('time.never');
   const mins = Math.round((Date.now() - ts) / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins} min ago`;
+  if (mins < 1) return t('time.justNow');
+  if (mins < 60) return t('time.minAgo', { n: mins });
   const hrs = Math.round(mins / 60);
-  if (hrs < 24) return `${hrs} hr ago`;
-  const days = Math.round(hrs / 24);
-  return `${days} day${days === 1 ? '' : 's'} ago`;
+  if (hrs < 24) return t('time.hrAgo', { n: hrs });
+  return tn('time.daysAgo', Math.round(hrs / 24));
+}
+
+// Sessions store the English label they were created with. Map it back to a key so it shows in the current language.
+const LABEL_KEYS = {
+  "Today's session": 'kind.today', 'New questions': 'kind.new', 'First steps': 'kind.first', Review: 'kind.due',
+  'Weak spots': 'kind.weak', 'Most missed': 'kind.mostMissed', 'Saved questions': 'kind.saved', 'Random mix': 'kind.random',
+  Marathon: 'kind.marathon', 'Retry missed': 'kind.retry', 'Mock test': 'kind.mock',
+};
+export function sessionLabel(label) {
+  const exam = /^Exam (\d+)$/.exec(label || '');
+  if (exam) return t('kind.exam', { n: exam[1] });
+  return LABEL_KEYS[label] ? t(LABEL_KEYS[label]) : label || '';
 }
 
 /** Stacked horizontal bar. segments: [{n, cls, label}] */

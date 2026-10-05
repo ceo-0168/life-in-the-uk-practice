@@ -3,7 +3,8 @@ import { MOCK, isCorrect, optionOrder, shuffle, uid, supportKindForSession } fro
 import * as store from './store.js';
 import { byId, examLabel } from './ctx.js';
 import { supportCard } from './views/support.js';
-import { h, icon, toast, announce, closeDialogs, openDialog, confirmDialog, fmtDuration, pct } from './ui.js';
+import { h, icon, toast, announce, closeDialogs, openDialog, confirmDialog, fmtDuration, pct, sessionLabel } from './ui.js';
+import { t, tn } from './i18n.js';
 
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 const MAX_Q_MS = 5 * 60 * 1000;
@@ -16,9 +17,9 @@ export async function startSession({ mode, kind, label, qids }) {
     // A mock's answers are only scored when it finishes, so replacing it would throw them away.
     const answered = Object.keys(prior.answers || {}).length;
     const discard = await confirmDialog({
-      title: 'Discard your mock test?',
-      body: `You have a mock test in progress (${answered} of ${prior.qids.length} answered). Starting something new discards it without scoring.`,
-      confirm: 'Discard and start', cancel: 'Resume the mock', danger: true,
+      title: t('sess.discard.title'),
+      body: t('sess.discard.body', { done: answered, total: prior.qids.length }),
+      confirm: t('sess.discard.confirm'), cancel: t('sess.discard.cancel'), danger: true,
     });
     if (!discard) { location.hash = '#/session'; return; }
   }
@@ -123,7 +124,7 @@ export function renderSession(root) {
   // Nothing below (timers, key handlers) has been set up yet, so nothing can fire a second time.
   if (mock && Date.now() >= a.deadline) {
     const summary = completeMock(a, true);
-    toast("The time ran out while you were away, so your test was marked.", { ms: 4000 });
+    toast(t('sess.expiredAway'), { ms: 4000 });
     location.hash = `#/results/${summary.id}`;
     return () => {};
   }
@@ -157,16 +158,16 @@ export function renderSession(root) {
     const focusKey = document.activeElement?.dataset?.focus;
 
     // top bar
-    const timer = mock ? h('span', { class: 'timer', id: 'timer', role: 'timer', 'aria-label': 'Time remaining' }, '') : null;
+    const timer = mock ? h('span', { class: 'timer', id: 'timer', role: 'timer', 'aria-label': t('sess.timeRemaining') }, '') : null;
     const top = h('div', { class: 'session-top' },
-      h('button', { class: 'btn btn-ghost btn-sm', onClick: endEarly, 'aria-label': mock ? 'Finish test' : 'End session', 'data-focus': 'end' }, icon('x', 18), mock ? 'Finish' : 'End'),
-      h('div', { class: 'session-count' }, `Question ${a.i + 1} of ${a.qids.length}`),
-      timer || h('span', { class: 'session-label' }, a.label));
-    const bar = h('div', { class: 'progress', role: 'progressbar', 'aria-label': 'Progress', 'aria-valuemin': 0, 'aria-valuemax': a.qids.length, 'aria-valuenow': a.i + (checked ? 1 : 0) },
+      h('button', { class: 'btn btn-ghost btn-sm', onClick: endEarly, 'aria-label': mock ? t('sess.finishTest') : t('sess.endSession'), 'data-focus': 'end' }, icon('x', 18), mock ? t('sess.finish') : t('sess.end')),
+      h('div', { class: 'session-count' }, t('sess.questionOf', { n: a.i + 1, total: a.qids.length })),
+      timer || h('span', { class: 'session-label' }, sessionLabel(a.label)));
+    const bar = h('div', { class: 'progress', role: 'progressbar', 'aria-label': t('sess.progress'), 'aria-valuemin': 0, 'aria-valuemax': a.qids.length, 'aria-valuenow': a.i + (checked ? 1 : 0) },
       h('span', { style: `width:${((a.i + (checked ? 1 : 0)) / a.qids.length) * 100}%` }));
 
     // question card
-    const hint = q.pick > 1 ? `Select ${q.pick} answers` : 'Select 1 answer';
+    const hint = q.pick > 1 ? t('sess.selectN', { n: q.pick }) : t('sess.selectOne');
     const options = h('div', { class: 'options', role: q.pick > 1 ? 'group' : 'radiogroup', 'aria-label': hint },
       order.map((idx, pos) => {
         const o = q.options[idx];
@@ -175,8 +176,8 @@ export function renderSession(root) {
         let mark = null;
         let status = '';
         if (checked) {
-          if (o.c) { cls += picked ? ' right' : ' missed'; mark = icon('check', 18); status = picked ? ', correct' : ', the correct answer'; }
-          else if (picked) { cls += ' wrong'; mark = icon('x', 18); status = ', incorrect'; }
+          if (o.c) { cls += picked ? ' right' : ' missed'; mark = icon('check', 18); status = picked ? t('sess.status.correct') : t('sess.status.theCorrect'); }
+          else if (picked) { cls += ' wrong'; mark = icon('x', 18); status = t('sess.status.incorrect'); }
         }
         return h('button', {
           class: cls, type: 'button', role: q.pick > 1 ? 'checkbox' : 'radio',
@@ -186,18 +187,18 @@ export function renderSession(root) {
           h('span', { class: 'opt-key', 'aria-hidden': 'true' }, LETTERS[pos]),
           h('span', { class: 'opt-text' }, o.t),
           mark ? h('span', { class: 'opt-mark' }, mark) : null,
-          checked && o.c && !picked ? h('span', { class: 'opt-note', 'aria-hidden': 'true' }, 'Correct answer') : null);
+          checked && o.c && !picked ? h('span', { class: 'opt-note', 'aria-hidden': 'true' }, t('sess.correctAnswer')) : null);
       }));
 
     const tools = h('div', { class: 'q-tools' },
       h('button', { class: 'tool' + (meta.bm ? ' on' : ''), type: 'button', 'aria-pressed': meta.bm ? 'true' : 'false', 'data-focus': 'tool-bm', onClick: () => { store.setMeta(q.id, { bm: !meta.bm }); draw(); } },
-        icon('star', 16), meta.bm ? 'Saved' : 'Save'),
+        icon('star', 16), meta.bm ? t('q.saved') : t('q.save')),
       mock ? h('button', { class: 'tool' + (a.flags[q.id] ? ' on' : ''), type: 'button', 'aria-pressed': a.flags[q.id] ? 'true' : 'false', 'data-focus': 'tool-flag', onClick: () => { a.flags[q.id] = !a.flags[q.id]; persist(); draw(); } },
-        icon('flag', 16), a.flags[q.id] ? 'Flagged' : 'Flag for later') : null,
-      !mock ? h('button', { class: 'tool' + (meta.rep ? ' on' : ''), type: 'button', 'aria-pressed': meta.rep ? 'true' : 'false', 'data-focus': 'tool-rep', title: 'Mark this question or its answer as looking wrong', onClick: () => { store.setMeta(q.id, { rep: !meta.rep }); toast(!meta.rep ? 'Marked as possibly wrong. Find it under Questions → Reported.' : 'Report removed.'); draw(); } },
-        icon('alert', 16), meta.rep ? 'Reported' : 'Looks wrong?') : null);
+        icon('flag', 16), a.flags[q.id] ? t('sess.flagged') : t('sess.flag')) : null,
+      !mock ? h('button', { class: 'tool' + (meta.rep ? ' on' : ''), type: 'button', 'aria-pressed': meta.rep ? 'true' : 'false', 'data-focus': 'tool-rep', title: t('sess.reportTitle'), onClick: () => { store.setMeta(q.id, { rep: !meta.rep }); toast(!meta.rep ? t('sess.reportedToast') : t('sess.reportRemoved')); draw(); } },
+        icon('alert', 16), meta.rep ? t('q.reported') : t('q.looksWrong')) : null);
 
-    const card = h('section', { class: 'card q-card', 'aria-label': 'Question' },
+    const card = h('section', { class: 'card q-card', 'aria-label': t('sess.questionAria') },
       h('div', { class: 'q-source' }, examLabel(q)),
       h('h2', { class: 'q-text', tabIndex: -1 }, q.text),
       h('p', { class: 'q-hint' + (q.pick > 1 ? ' multi' : '') }, hint),
@@ -208,10 +209,10 @@ export function renderSession(root) {
     if (!mock && checked) {
       const ok = a.results[q.id] === 'r';
       feedback = h('section', { class: 'card feedback ' + (ok ? 'ok' : 'bad') },
-        h('div', { class: 'feedback-head' }, icon(ok ? 'check' : 'x', 20), ok ? 'Correct' : 'Not quite'),
-        !ok ? h('p', { class: 'feedback-answer' }, 'Correct: ', q.options.filter((o) => o.c).map((o) => o.t).join(' · ')) : null,
-        h('p', { class: 'feedback-ref' }, q.ref || 'No explanation is provided for this question in the source.'),
-        q.note ? h('p', { class: 'feedback-note' }, h('strong', null, 'Since the handbook: '), q.note) : null);
+        h('div', { class: 'feedback-head' }, icon(ok ? 'check' : 'x', 20), ok ? t('sess.correct') : t('sess.notQuite')),
+        !ok ? h('p', { class: 'feedback-answer' }, t('sess.correctColon') + ' ', q.options.filter((o) => o.c).map((o) => o.t).join(' · ')) : null,
+        h('p', { class: 'feedback-ref' }, q.ref || t('q.noExplanation')),
+        q.note ? h('p', { class: 'feedback-note' }, h('strong', null, t('q.sinceHandbook') + ' '), q.note) : null);
     }
 
     // bottom action bar
@@ -219,18 +220,18 @@ export function renderSession(root) {
     let actions;
     if (mock) {
       actions = h('div', { class: 'actionbar' },
-        h('button', { class: 'btn', disabled: a.i === 0, 'data-focus': 'act-back', onClick: () => go(a.i - 1) }, icon('left', 18), 'Back'),
-        h('button', { class: 'btn btn-ghost', onClick: openNavigator, 'aria-label': `Question navigator, ${answeredCount} of ${a.qids.length} answered` }, icon('grid', 18), `${answeredCount}/${a.qids.length}`),
+        h('button', { class: 'btn', disabled: a.i === 0, 'data-focus': 'act-back', onClick: () => go(a.i - 1) }, icon('left', 18), t('sess.back')),
+        h('button', { class: 'btn btn-ghost', onClick: openNavigator, 'aria-label': t('sess.navigatorAria', { done: answeredCount, total: a.qids.length }) }, icon('grid', 18), `${answeredCount}/${a.qids.length}`),
         last
-          ? h('button', { class: 'btn btn-primary', 'data-focus': 'act-primary', onClick: () => finishMock(false) }, 'Finish test')
-          : h('button', { class: 'btn btn-primary', 'data-focus': 'act-primary', onClick: () => go(a.i + 1) }, 'Next', icon('right', 18)));
+          ? h('button', { class: 'btn btn-primary', 'data-focus': 'act-primary', onClick: () => finishMock(false) }, t('sess.finishTest'))
+          : h('button', { class: 'btn btn-primary', 'data-focus': 'act-primary', onClick: () => go(a.i + 1) }, t('sess.next'), icon('right', 18)));
     } else if (!checked) {
       actions = h('div', { class: 'actionbar' },
         h('button', { class: 'btn btn-primary btn-block', 'data-focus': 'act-primary', disabled: sel.length !== q.pick, onClick: check },
-          sel.length === q.pick ? 'Check answer' : `Select ${q.pick - sel.length} more`));
+          sel.length === q.pick ? t('sess.check') : t('sess.selectMore', { n: q.pick - sel.length })));
     } else {
       actions = h('div', { class: 'actionbar' },
-        h('button', { class: 'btn btn-primary btn-block', onClick: next, 'data-focus': 'act-primary', id: 'next-btn' }, last ? 'See results' : 'Next question', icon('right', 18)));
+        h('button', { class: 'btn btn-primary btn-block', onClick: next, 'data-focus': 'act-primary', id: 'next-btn' }, last ? t('sess.seeResults') : t('sess.nextQuestion'), icon('right', 18)));
     }
 
     view.replaceChildren(...[top, bar, card, feedback, actions].filter(Boolean));
@@ -248,7 +249,7 @@ export function renderSession(root) {
     if (sel.includes(idx)) sel = sel.filter((i) => i !== idx);
     else if (q.pick === 1) sel = [idx];
     else if (sel.length < q.pick) sel.push(idx);
-    else { toast(`Select exactly ${q.pick} — tap one to deselect first.`, { ms: 2200 }); return; }
+    else { toast(t('sess.selectExactly', { n: q.pick }), { ms: 2200 }); return; }
     if (sel.length) a.answers[q.id] = sel; else delete a.answers[q.id];
     persist();
     draw();
@@ -266,7 +267,7 @@ export function renderSession(root) {
     store.recordAttempt({ id: `${a.id}:${q.id}`, q: q.id, ok, sel, ms: a.spent[q.id], mode: a.kind === 'retry' ? 'retry' : 'practice', s: a.id });
     persist();
     draw();
-    announce(ok ? 'Correct.' : `Not quite. Correct answer: ${q.options.filter((o) => o.c).map((o) => o.t).join(', ')}.`);
+    announce(ok ? t('sess.announce.correct') : t('sess.announce.wrong', { answer: q.options.filter((o) => o.c).map((o) => o.t).join(', ') }));
     view.querySelector('.feedback')?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
@@ -294,29 +295,29 @@ export function renderSession(root) {
     if (mock) return finishMock(false);
     const done = Object.keys(a.checked).length;
     if (done === 0) {
-      const sure = await confirmDialog({ title: 'Leave this session?', body: 'You have not answered anything yet.', confirm: 'Leave', cancel: 'Stay' });
+      const sure = await confirmDialog({ title: t('sess.leave.title'), body: t('sess.leave.body'), confirm: t('sess.leave.confirm'), cancel: t('sess.leave.cancel') });
       if (!sure || finished) return;
       finished = true;
       store.clearActive();
       location.hash = '#/';
       return;
     }
-    const sure = await confirmDialog({ title: 'End session?', body: `${done} answer${done === 1 ? ' is' : 's are'} already saved. The remaining questions stay unanswered.`, confirm: 'End and see results', cancel: 'Keep going' });
+    const sure = await confirmDialog({ title: t('sess.end.title'), body: tn('sess.end.body', done), confirm: t('sess.end.confirm'), cancel: t('sess.end.cancel') });
     if (sure) finishPractice();
   }
 
   function openNavigator() {
-    const label = (id, i) => `Question ${i + 1}${isAnswered(id) ? ', answered' : a.answers[id] ? ', partly answered' : ', not answered'}${a.flags[id] ? ', flagged' : ''}`;
+    const label = (id, i) => t('sess.nav.cell', { n: i + 1 }) + (isAnswered(id) ? t('sess.nav.answered') : a.answers[id] ? t('sess.nav.partly') : t('sess.nav.notAnswered')) + (a.flags[id] ? t('sess.nav.flagged') : '');
     const cells = a.qids.map((id, i) => h('button', {
       class: 'nav-cell' + (isAnswered(id) ? ' done' : '') + (a.flags[id] ? ' flagged' : '') + (i === a.i ? ' current' : ''),
       type: 'submit', value: String(i), 'aria-label': label(id, i),
     }, String(i + 1)));
-    const dlg = h('dialog', { class: 'dialog', 'aria-label': 'Questions' },
+    const dlg = h('dialog', { class: 'dialog', 'aria-label': t('sess.nav.title') },
       h('form', { method: 'dialog' },
-        h('h2', null, 'Questions'),
+        h('h2', null, t('sess.nav.title')),
         h('div', { class: 'nav-grid' }, cells),
-        h('p', { class: 'nav-legend' }, h('span', { class: 'dot done' }), 'Answered ', h('span', { class: 'dot flagged' }), 'Flagged ', h('span', { class: 'dot' }), 'Unanswered'),
-        h('div', { class: 'dialog-actions' }, h('button', { class: 'btn', value: 'close' }, 'Close'))));
+        h('p', { class: 'nav-legend' }, h('span', { class: 'dot done' }), t('sess.nav.legendAnswered') + ' ', h('span', { class: 'dot flagged' }), t('sess.nav.legendFlagged') + ' ', h('span', { class: 'dot' }), t('sess.nav.legendUnanswered')),
+        h('div', { class: 'dialog-actions' }, h('button', { class: 'btn', value: 'close' }, t('sess.nav.close')))));
     dlg.addEventListener('close', () => {
       const n = Number(dlg.returnValue);
       dlg.remove();
@@ -343,12 +344,12 @@ export function renderSession(root) {
       const unanswered = a.qids.filter((id) => !isAnswered(id)).length;
       const flagged = a.qids.filter((id) => a.flags[id]).length;
       const parts = [];
-      if (unanswered) parts.push(`${unanswered} unanswered or incomplete question${unanswered === 1 ? '' : 's'} will count as wrong`);
-      if (flagged) parts.push(`${flagged} flagged`);
+      if (unanswered) parts.push(tn('sess.finish.unanswered', unanswered));
+      if (flagged) parts.push(t('sess.finish.flagged', { n: flagged }));
       const sure = await confirmDialog({
-        title: 'Finish the test?',
-        body: parts.length ? `${parts.join('; ')}. You cannot change answers after finishing.` : 'You cannot change answers after finishing.',
-        confirm: 'Finish and mark', cancel: 'Keep working',
+        title: t('sess.finish.title'),
+        body: (parts.length ? parts.join(t('sess.finish.sep')) + t('sess.finish.stop') : '') + t('sess.finish.cannotChange'),
+        confirm: t('sess.finish.confirm'), cancel: t('sess.finish.cancel'),
       });
       // The clock may have run out (and already marked the test) while the dialog was open.
       if (!sure || finished) return;
@@ -373,7 +374,7 @@ export function renderSession(root) {
     }
     if (left <= 0) {
       clearInterval(timerId);
-      toast("Time's up — marking your test.", { ms: 2500 });
+      toast(t('sess.timeUp'), { ms: 2500 });
       finishMock(true);
     }
   }
@@ -430,7 +431,7 @@ export function renderResults(root, id) {
 
   function drawList() {
     const items = (showAll ? ids : missed);
-    filterBtn.textContent = showAll ? `Show only missed (${missed.length})` : `Show all (${ids.length})`;
+    filterBtn.textContent = showAll ? t('res.showMissed', { n: missed.length }) : t('res.showAll', { n: ids.length });
     list.replaceChildren(...items.map((qid) => {
       const q = byId.get(qid);
       const r = s.res[qid];
@@ -439,28 +440,28 @@ export function renderResults(root, id) {
       return h('details', { class: 'result-item ' + (r === 'r' ? 'r' : 'w') },
         h('summary', null,
           h('span', { class: 'ri-mark' }, icon(r === 'r' ? 'check' : 'x', 16)),
-          h('span', { class: 'sr-only' }, r === 'r' ? 'Correct: ' : r === 'u' ? 'Unanswered: ' : 'Incorrect: '),
+          h('span', { class: 'sr-only' }, r === 'r' ? t('res.sr.correct') : r === 'u' ? t('res.sr.unanswered') : t('res.sr.incorrect')),
           h('span', { class: 'ri-text' }, q.text)),
         h('div', { class: 'ri-body' },
-          r === 'u' ? h('p', { class: 'ri-yours' }, 'You did not answer this question.') : null,
-          r === 'w' && yours ? h('p', { class: 'ri-yours' }, h('strong', null, 'Your answer: '), yours) : null,
-          h('p', { class: 'ri-correct' }, h('strong', null, 'Correct: '), q.options.filter((o) => o.c).map((o) => o.t).join(' · ')),
-          h('p', { class: 'ri-ref' }, q.ref || 'No explanation is provided for this question in the source.'),
-          q.note ? h('p', { class: 'ri-ref' }, h('strong', null, 'Since the handbook: '), q.note) : null));
+          r === 'u' ? h('p', { class: 'ri-yours' }, t('res.notAnswered')) : null,
+          r === 'w' && yours ? h('p', { class: 'ri-yours' }, h('strong', null, t('res.yourAnswer') + ' '), yours) : null,
+          h('p', { class: 'ri-correct' }, h('strong', null, t('sess.correctColon') + ' '), q.options.filter((o) => o.c).map((o) => o.t).join(' · ')),
+          h('p', { class: 'ri-ref' }, q.ref || t('q.noExplanation')),
+          q.note ? h('p', { class: 'ri-ref' }, h('strong', null, t('q.sinceHandbook') + ' '), q.note) : null));
     }));
-    if (!items.length) list.append(h('p', { class: 'empty' }, 'Nothing missed — every answer was right.'));
+    if (!items.length) list.append(h('p', { class: 'empty' }, t('res.nothingMissed')));
   }
 
   const banner = mock
     ? h('div', { class: 'result-banner ' + (s.passed ? 'pass' : 'fail') },
-        h('div', { class: 'rb-title' }, s.passed ? 'Pass' : 'Not yet'),
-        h('div', { class: 'rb-sub' }, `${s.correct}/${s.total} — pass mark is ${MOCK.passMark}/${MOCK.questions} (75%)${s.timedOut ? ' · time ran out' : ''}`))
+        h('div', { class: 'rb-title' }, s.passed ? t('stats.pass') : t('home.mock.notYetTitle')),
+        h('div', { class: 'rb-sub' }, t('res.passMark', { c: s.correct, t: s.total, pass: MOCK.passMark, total: MOCK.questions }) + (s.timedOut ? t('res.timeRanOut') : '')))
     : h('div', { class: 'result-banner ' + (p >= 75 ? 'pass' : 'neutral') },
         h('div', { class: 'rb-title' }, `${s.correct}/${s.total}`),
-        h('div', { class: 'rb-sub' }, `${p}% correct · ${s.label}`));
+        h('div', { class: 'rb-sub' }, t('res.percentCorrect', { p, label: sessionLabel(s.label) })));
 
   const retry = missed.length
-    ? h('button', { class: 'btn btn-primary', onClick: () => startSession({ mode: 'practice', kind: 'retry', label: 'Retry missed', qids: missed }) }, icon('refresh', 18), `Retry ${missed.length} missed`)
+    ? h('button', { class: 'btn btn-primary', onClick: () => startSession({ mode: 'practice', kind: 'retry', label: 'Retry missed', qids: missed }) }, icon('refresh', 18), t('res.retry', { n: missed.length }))
     : null;
 
   const kind = supportKindForSession(s);
@@ -470,11 +471,12 @@ export function renderResults(root, id) {
     banner,
     h('div', { class: 'result-meta' },
       h('span', null, icon('clock', 16), ` ${fmtDuration(s.ms)}`),
-      h('span', null, `${ids.filter((q) => s.res[q] === 'r').length} right · ${ids.filter((q) => s.res[q] === 'w').length} wrong${ids.some((q) => s.res[q] === 'u') ? ` · ${ids.filter((q) => s.res[q] === 'u').length} unanswered` : ''}`)),
-    removed ? h('p', { class: 'muted' }, `${removed} question${removed === 1 ? '' : 's'} from this session ${removed === 1 ? 'is' : 'are'} no longer in the question bank and can't be shown.`) : null,
-    h('div', { class: 'result-actions' }, retry, h('a', { class: 'btn', href: '#/' }, 'Home'), h('a', { class: 'btn', href: '#/practice' }, 'Practise more')),
+      h('span', null, t('res.counts', { right: ids.filter((q) => s.res[q] === 'r').length, wrong: ids.filter((q) => s.res[q] === 'w').length })
+        + (ids.some((q) => s.res[q] === 'u') ? t('res.countsUnanswered', { n: ids.filter((q) => s.res[q] === 'u').length }) : ''))),
+    removed ? h('p', { class: 'muted' }, tn('res.removed', removed)) : null,
+    h('div', { class: 'result-actions' }, retry, h('a', { class: 'btn', href: '#/' }, t('nav.home')), h('a', { class: 'btn', href: '#/practice' }, t('res.practiseMore'))),
     support,
-    h('div', { class: 'section-head' }, h('h3', null, 'Review'), filterBtn),
+    h('div', { class: 'section-head' }, h('h3', null, t('res.review')), filterBtn),
     list));
   drawList();
   window.scrollTo(0, 0);

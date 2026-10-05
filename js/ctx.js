@@ -1,13 +1,14 @@
 // Shared, read-only application context: the question bank and cached derived cards.
 import { deriveCards } from './engine.js';
 import * as store from './store.js';
+import { t } from './i18n.js';
 
 export let bank = null;
 export const byId = new Map();
 
 export async function loadBank() {
   const res = await fetch('data/questions.json');
-  if (!res.ok) throw new Error(`Could not load questions (${res.status})`);
+  if (!res.ok) throw new Error(t('error.loadQuestions', { status: res.status }));
   bank = await res.json();
   byId.clear();
   bank.questions.forEach((q) => byId.set(q.id, q));
@@ -22,4 +23,4 @@ export function cards() {
   return memo.v;
 }
 
-export const examLabel = (q) => q.exams.map((w) => `Exam ${w.exam} · Q${w.n}`).join(' / ');
+export const examLabel = (q) => q.exams.map((w) => `${t('kind.exam', { n: w.exam })} · ${t('q.number', { n: w.n })}`).join(' / ');

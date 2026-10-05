@@ -471,3 +471,14 @@ textarea.input { min-height: 0; resize: vertical; }
 .mock-promo { flex-wrap: wrap; }
 .mock-promo > div { flex: 1 1 200px; }
 .mock-promo .btn { white-space: nowrap; flex: none; }
+
+/* ---------- languages ---------- */
+:lang(zh-Hant) body, body:lang(zh-Hant), :lang(zh-Hant) { font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "PingFang HK", "Noto Sans TC", "Microsoft JhengHei", "Segoe UI", Roboto, sans-serif; }
+:lang(zh-Hans) body, body:lang(zh-Hans), :lang(zh-Hans) { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif; }
+:lang(zh-Hant) .eyebrow, :lang(zh-Hans) .eyebrow { text-transform: none; letter-spacing: .04em; }
+:lang(zh-Hant) .whero h1, :lang(zh-Hans) .whero h1 { letter-spacing: 0; line-height: 1.25; }
+.wlang { display: flex; justify-content: center; }
+.lang-seg { flex-wrap: wrap; justify-content: center; }
+.lang-seg .seg-btn { white-space: nowrap; }
+
+p, li, .muted { text-wrap: pretty; }

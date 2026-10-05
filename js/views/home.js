@@ -2,7 +2,8 @@ import { counts, readiness, verdict, daysToTest, streakDays, todayCount, selectQ
 import * as store from '../store.js';
 import { bank, cards } from '../ctx.js';
 import { startSession } from '../session.js';
-import { h, icon, pct, stackedBar, timeAgo } from '../ui.js';
+import { h, icon, pct, stackedBar, timeAgo, sessionLabel } from '../ui.js';
+import { t, tn } from '../i18n.js';
 import { renderWelcome } from './welcome.js';
 import { supportCard } from './support.js';
 
@@ -36,52 +37,52 @@ export function renderHome(root) {
   const daysSinceExport = state.lastExportAt ? (Date.now() - state.lastExportAt) / 86400000 : Infinity;
   if (state.attempts.length >= 20 && (state.unsaved >= 60 || daysSinceExport > 7)) {
     banners.push(h('a', { class: 'banner banner-warn', href: '#/settings' }, icon('download', 18),
-      state.lastExportAt ? `Last backup ${timeAgo(state.lastExportAt)}. Back up your progress.` : 'No backup yet. Back up your progress so it can never be lost.', icon('right', 16)));
+      state.lastExportAt ? t('home.banner.lastBackup', { when: timeAgo(state.lastExportAt) }) : t('home.banner.noBackup'), icon('right', 16)));
   }
   if (active) {
     const done = Object.keys(active.mode === 'mock' ? active.answers : active.checked).length;
     banners.push(h('a', { class: 'banner banner-info', href: '#/session' }, icon('play', 18),
-      `Resume ${active.mode === 'mock' ? 'mock test' : active.label.toLowerCase()} — ${done}/${active.qids.length} done`, icon('right', 16)));
+      t('home.banner.resume', { label: sessionLabel(active.mode === 'mock' ? 'Mock test' : active.label), done, total: active.qids.length }), icon('right', 16)));
   }
 
   const goalPct = Math.min(100, pct(plan.done, plan.goal));
+  const planText = plan.qids.length
+    ? t('home.plan', { reviews: tn('count.reviews', plan.reviews), fresh: tn('count.newQuestions', plan.fresh) })
+      + (plan.other ? t('home.planExtra', { n: plan.other }) : '')
+    : t('home.nothingDue');
   const hero = h('section', { class: 'card hero' },
     h('div', { class: 'hero-top' },
       h('div', null,
-        h('div', { class: 'eyebrow' }, left == null ? 'Today' : left === 0 ? 'Test day' : `${left} day${left === 1 ? '' : 's'} to your test`),
-        h('h2', null, plan.done >= plan.goal ? 'Daily goal reached' : `${plan.done}/${plan.goal} answered today`)),
-      streak ? h('div', { class: 'streak', title: 'Consecutive days practised' }, icon('flame', 18), `${streak}`) : null),
+        h('div', { class: 'eyebrow' }, left == null ? t('home.today') : left === 0 ? t('home.testDay') : tn('home.daysToTest', left)),
+        h('h2', null, plan.done >= plan.goal ? t('home.goalReached') : t('home.answeredToday', { done: plan.done, goal: plan.goal }))),
+      streak ? h('div', { class: 'streak', title: t('home.streakTitle') }, icon('flame', 18), `${streak}`) : null),
     h('div', { class: 'progress goal' }, h('span', { style: `width:${goalPct}%` })),
-    h('p', { class: 'muted' }, plan.qids.length
-      ? `Today's session: ${plan.reviews} review${plan.reviews === 1 ? '' : 's'} + ${plan.fresh} new question${plan.fresh === 1 ? '' : 's'}${plan.other ? ` + ${plan.other} more to practise` : ''}`
-      : 'Nothing due — pick a topic below.'),
+    h('p', { class: 'muted' }, planText),
     h('button', {
       class: 'btn btn-primary btn-lg btn-block',
       onClick: () => startSession({ mode: 'practice', kind: 'today', label: "Today's session", qids: plan.qids }),
-    }, icon('play', 18), plan.done >= plan.goal ? 'Keep going' : "Start today's session"));
+    }, icon('play', 18), plan.done >= plan.goal ? t('home.keepGoing') : t('home.startToday')));
 
   const enough = c.seen >= 20;
   const need = Math.round(ready * MOCK.questions);
   const readyCard = h('section', { class: 'card' },
     h('div', { class: 'card-head' },
-      h('h3', null, 'Test readiness'),
-      enough ? h('span', { class: `chip chip-${v.level}` }, v.text) : null),
+      h('h3', null, t('home.readiness')),
+      enough ? h('span', { class: `chip chip-${v.level}` }, t(`verdict.${v.level}`)) : null),
     h('div', { class: 'ready-row' },
       h('div', { class: 'ready-num' }, enough ? `${need}` : '–', h('span', null, `/${MOCK.questions}`)),
-      h('p', { class: 'muted' }, enough
-        ? `Estimated score on a real test (pass mark ${MOCK.passMark}), from how well you know the questions you've seen and how many you haven't yet.`
-        : 'Answer 20 questions to get an estimated test score.')),
+      h('p', { class: 'muted' }, enough ? t('home.readinessEstimate', { pass: MOCK.passMark }) : t('home.readinessNeedMore'))),
     stackedBar([
-      { n: c.mastered, cls: 'seg-mastered', label: 'Mastered' },
-      { n: c.shaky, cls: 'seg-shaky', label: 'Learning' },
-      { n: c.wrong, cls: 'seg-wrong', label: 'Missed last time' },
-      { n: c.unseen, cls: 'seg-unseen', label: 'Not seen' },
+      { n: c.mastered, cls: 'seg-mastered', label: t('status.mastered') },
+      { n: c.shaky, cls: 'seg-shaky', label: t('status.learning') },
+      { n: c.wrong, cls: 'seg-wrong', label: t('status.missedLast') },
+      { n: c.unseen, cls: 'seg-unseen', label: t('status.notSeen') },
     ], c.total),
     h('ul', { class: 'legend' },
-      legend('seg-mastered', 'Mastered', c.mastered, 'Right 3 times in a row'),
-      legend('seg-shaky', 'Learning', c.shaky, 'Right last time'),
-      legend('seg-wrong', 'Missed', c.wrong, 'Wrong last time'),
-      legend('seg-unseen', 'Not seen', c.unseen, 'Not attempted yet')));
+      legend('seg-mastered', t('status.mastered'), c.mastered, t('legend.mastered')),
+      legend('seg-shaky', t('status.learning'), c.shaky, t('legend.learning')),
+      legend('seg-wrong', t('status.missed'), c.wrong, t('legend.missed')),
+      legend('seg-unseen', t('status.notSeen'), c.unseen, t('legend.notSeen'))));
 
   const tile = (n, label, sub, onClick, disabled) =>
     h('button', { class: 'tile', disabled, onClick }, h('div', { class: 'tile-n' }, String(n)), h('div', { class: 'tile-l' }, label), h('div', { class: 'tile-s' }, sub));
@@ -92,19 +93,20 @@ export function renderHome(root) {
     startSession({ mode, kind, label, qids });
   };
   const quick = h('section', null,
-    h('div', { class: 'section-head' }, h('h3', null, 'Quick practice'), h('a', { class: 'link', href: '#/practice' }, 'All options')),
+    h('div', { class: 'section-head' }, h('h3', null, t('home.quick')), h('a', { class: 'link', href: '#/practice' }, t('home.allOptions'))),
     h('div', { class: 'tiles' },
-      tile(c.due, 'Due for review', 'Spaced repetition', go('due', 'Review'), c.due === 0),
-      tile(weakCount, 'Weak spots', 'Missed or under 60%', go('weak', 'Weak spots'), weakCount === 0),
-      tile(c.unseen, 'New questions', 'Not seen yet', go('new', 'New questions'), c.unseen === 0),
-      tile(bmCount, 'Saved', 'Starred questions', go('bookmarked', 'Saved questions'), bmCount === 0)));
+      tile(c.due, t('tile.due'), t('tile.dueSub'), go('due', 'Review'), c.due === 0),
+      tile(weakCount, t('tile.weak'), t('tile.weakSub'), go('weak', 'Weak spots'), weakCount === 0),
+      tile(c.unseen, t('tile.new'), t('tile.newSub'), go('new', 'New questions'), c.unseen === 0),
+      tile(bmCount, t('tile.saved'), t('tile.savedSub'), go('bookmarked', 'Saved questions'), bmCount === 0)));
 
+  const last = mocks.at(-1);
   const mockCard = h('section', { class: 'card mock-promo' },
     h('div', null,
-      h('h3', null, 'Mock test'),
-      h('p', { class: 'muted' }, `${MOCK.questions} questions · ${MOCK.minutes} minutes · pass at ${MOCK.passMark}. No feedback until the end.`),
-      mocks.length ? h('p', { class: 'muted' }, `Last: ${mocks.at(-1).correct}/${mocks.at(-1).total} ${mocks.at(-1).passed ? '— passed' : '— not yet'}`) : null),
-    h('a', { class: 'btn', href: '#/practice' }, 'Take a mock', icon('right', 18)));
+      h('h3', null, t('home.mock.title')),
+      h('p', { class: 'muted' }, t('home.mock.desc', { q: MOCK.questions, m: MOCK.minutes, pass: MOCK.passMark })),
+      last ? h('p', { class: 'muted' }, t('home.mock.last', { c: last.correct, t: last.total, result: last.passed ? t('home.mock.passed') : t('home.mock.notYet') })) : null),
+    h('a', { class: 'btn', href: '#/practice' }, t('home.mock.take'), icon('right', 18)));
 
   root.replaceChildren(h('div', { class: 'stack-v' }, ...banners, hero, readyCard, quick, mockCard, supportCard('home')));
   return () => {};

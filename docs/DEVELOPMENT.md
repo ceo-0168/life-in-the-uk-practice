@@ -119,3 +119,18 @@ When you add a file under `js/`, `css/`, `icons/` or `data/`, add it to `SHELL` 
 - Attempts store which options you picked by position. If an answer key is ever corrected, history is not re-graded.
 - The "readiness" figure is an estimate with fixed weights, not a prediction.
 - Tested in desktop and phone-sized browser windows. Not yet tested on a physical iPhone or Android device.
+
+## Translations
+
+The interface is available in English, Traditional Chinese (`zh-Hant`) and Simplified Chinese (`zh-Hans`). Questions, answer options and
+handbook explanations stay in English on purpose, because the real test is taken in English.
+
+- Strings live in `js/i18n/en.js` (the source), `zh-Hant.js` and `zh-Hans.js`. Code uses `t('key', {n: 3})`, and `tn('key', n)` for plurals
+  (English has `.one` / `.other`; Chinese defines only `.other`).
+- The language is a saved setting (`auto` follows the browser: `zh-HK`, `zh-TW` and `zh-MO` give Traditional, other `zh-*` give Simplified).
+- `tests/i18n.test.mjs` fails if a language is missing a key, a `{placeholder}` differs, a string was left in English, the two Chinese
+  scripts are mixed, the code asks for a key that doesn't exist, or a hard-coded English string appears in the interface code.
+- Session labels are stored in English and translated for display (`sessionLabel` in `js/ui.js`), so old saved sessions show correctly.
+- `npm run review:i18n` regenerates `docs/TRANSLATION_REVIEW.md`: every string side by side, for a native reader to review.
+- To add a language: add `js/i18n/<code>.js`, register it in `js/i18n.js` (`DICTS`, `LANGS`), allow it in `SETTING_CHOICES.lang`
+  (`js/engine.js`) and `index.html`'s rescue screen, and list the file in `sw.js`.

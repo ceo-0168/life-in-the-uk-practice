@@ -8,6 +8,8 @@
 
 *No sign-up · works on phone, tablet and laptop · works offline · your progress stays on your device*
 
+**English** · [繁體中文](README.zh-Hant.md) · [简体中文](README.zh-Hans.md)
+
 ![License: MIT](https://img.shields.io/badge/code%20licence-MIT-blue.svg)
 
 <br>
@@ -62,6 +64,8 @@ Where the handbook and today's law differ (for example, the Senedd now has 96 me
 ## Frequently asked questions
 
 **Does it cost anything?** No. It's free and ad-free. If it helped you prepare, you can [buy me a coffee](https://buymeacoffee.com/ryanchan).
+
+**Is it available in Chinese?** Yes. The menus, buttons and help text are available in Traditional Chinese (繁體中文) and Simplified Chinese (简体中文). The questions, answers and explanations stay in English, like the real test.
 
 **Does it work offline?** Yes, after your first visit.
 
